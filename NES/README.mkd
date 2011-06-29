@@ -1,0 +1,14 @@
+This project aims to create an alternative NES controller pcb.
+
+It includes:
+
+- a lipo battery (+ charging via mini usb)
+- a MCU
+- nRF24L01 wireless module
+
+
+
+![nex controller](/sebseb7/eagle/raw/master/NES/nes_controller.jpg)
+
+![nes board](/sebseb7/eagle/raw/master/NES/nes.jpg)
+
