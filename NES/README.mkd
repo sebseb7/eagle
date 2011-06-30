@@ -2,13 +2,21 @@ This project aims to create an alternative NES controller pcb.
 
 It includes:
 
-- a lipo battery (+ charging via mini usb)
-- a MCU
+- a 1-cell lipo battery (+ charging via mini usb and UVLO)
+- a MCU (atmgea88 or atmega644pa)
 - nRF24L01 wireless module
 
 
+Versions:
 
-![nex controller](/sebseb7/eagle/raw/master/NES/nes_controller.jpg)
+- v1 initial prototype
+- v2 upgraded to atmega644pa
+- v3 nRF24L01 directly included
+- v4 charger directly included (planned)
+- v5 add Gyro and ACC (planned)
+
+
+![nes controller](/sebseb7/eagle/raw/master/NES/nes_controller.jpg)
 
 ![nes board](/sebseb7/eagle/raw/master/NES/nes.jpg)
 
