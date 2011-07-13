@@ -9,10 +9,10 @@ It includes:
 
 Versions:
 
-- v1 initial prototype
+- v1 initial prototype (2 prototypes in production)
 - v2 upgraded to atmega644pa
 - v3 nRF24L01 directly included
-- v4 charger directly included (planned)
+- v4 charger directly included (planned) (currently on a daughter PCB from the "LipoManager" repository) 
 - v5 add Gyro and ACC (planned)
 
 
