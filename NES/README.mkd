@@ -18,7 +18,9 @@ Versions:
 
 ![nes controller](/sebseb7/eagle/raw/master/NES/nes_controller.jpg)
 
-![nes board](/sebseb7/eagle/raw/master/NES/NESv3_bot.jpg)
-![nes board](/sebseb7/eagle/raw/master/NES/NESv3_top.jpg)
-![nes board](/sebseb7/eagle/raw/master/NES/NESv3_sch.jpg)
+This is the v2:
+
+![nes board](/sebseb7/eagle/raw/master/NES/NESv2_bot.jpg)
+![nes board](/sebseb7/eagle/raw/master/NES/NESv2_top.jpg)
+![nes board](/sebseb7/eagle/raw/master/NES/NESv2_sch.jpg)
 
