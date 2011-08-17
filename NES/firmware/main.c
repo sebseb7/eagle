@@ -29,6 +29,9 @@ void powerOff(void);
 #define POWEROFF_PINN PORTC5
 #define POWEROFF_DDR DDRC
 
+#define USBSENSE_PORT PORTD
+#define USBSENSE_PINN PORTD2
+
 
 ISR(PCINT0_vect)
 {
@@ -90,6 +93,10 @@ int main (void)
 	KEY_SELECT_PORT |= (1<<KEY_SELECT_PINN);
 
 //	PORTD |= (1<<PORTD3);//IRQ		PCINT19	/ PCIE2
+
+
+	// pullup for usbsense
+	USBSENSE_PORT |= (1<<USBSENSE_PINN);
 
 	//switch LEDs to OFF and enable LED PINs as output
 	LED1_OFF;
@@ -215,8 +222,8 @@ void checkKeys(void)
 
 void checkOff(void)
 {
-	if(keyState == ((1<<KEY_A)|(1<<KEY_B)|(1<<KEY_UP)|(1<<KEY_LEFT)) )
-//	if(keyState == (1<<KEY_START))
+//	if(keyState == ((1<<KEY_A)|(1<<KEY_B)|(1<<KEY_UP)|(1<<KEY_LEFT)) )
+	if(keyState == (1<<KEY_SELECT))
 	{
 		powerOff();
 	}
