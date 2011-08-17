@@ -2,6 +2,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+//#include <util/atomic.h>
 
 #include "main.h"
 #include "radio.h"
@@ -148,7 +149,10 @@ int main (void)
 		if(keyInt == 1)
 		{
 			keyInt = 0;
-			checkKeys();
+			//ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+			//{
+				checkKeys();
+			//}
 		}
 		if(sendKeys == 1)
 		{
@@ -207,13 +211,13 @@ void checkKeys(void)
 		_delay_us(100);
 	}
 	
-	LED1_TOGGLE;
 
 	if(keyState != tmpKeyState)
 	{
 		sendKeys = 1;
 		timeout = 0;
 		keyState = tmpKeyState;	
+		LED1_TOGGLE;
 	}
 	
 	checkOff();	
@@ -222,15 +226,20 @@ void checkKeys(void)
 
 void checkOff(void)
 {
-//	if(keyState == ((1<<KEY_A)|(1<<KEY_B)|(1<<KEY_UP)|(1<<KEY_LEFT)) )
-	if(keyState == (1<<KEY_SELECT))
+	if(keyState == ((1<<KEY_A)|(1<<KEY_B)|(1<<KEY_UP)|(1<<KEY_LEFT)) )
+//	if(keyState == (1<<KEY_SELECT))
 	{
 		powerOff();
 	}
 }
 
+
 void powerOff(void)
 {
+	//diable all interrupts
+	cli();
+	
+	
 	LED1_OFF;
 	LED2_OFF;
 	LED3_OFF;
