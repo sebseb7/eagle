@@ -1,0 +1,36 @@
+#ifndef _LED_H
+#define _LED_H
+
+
+#define LED1_PINN PORTC0
+#define LED2_PINN PORTC1
+#define LED3_PINN PORTC2
+#define LED4_PINN PORTC3
+
+#define LED1_PORT PORTC
+#define LED2_PORT PORTC
+#define LED3_PORT PORTC
+#define LED4_PORT PORTC
+
+#define LED1_DDR DDRC
+#define LED2_DDR DDRC
+#define LED3_DDR DDRC
+#define LED4_DDR DDRC
+
+#define LED1_TOGGLE LED1_PORT ^= (1<<LED1_PINN)
+#define LED2_TOGGLE LED2_PORT ^= (1<<LED2_PINN)
+#define LED3_TOGGLE LED3_PORT ^= (1<<LED3_PINN)
+#define LED4_TOGGLE LED4_PORT ^= (1<<LED4_PINN)
+
+#define LED1_OFF LED1_PORT |= (1<<LED1_PINN)
+#define LED2_OFF LED2_PORT |= (1<<LED2_PINN)
+#define LED3_OFF LED3_PORT |= (1<<LED3_PINN)
+#define LED4_OFF LED4_PORT |= (1<<LED4_PINN)
+
+#define LED1_ON LED1_PORT &= ~(1<<LED1_PINN)
+#define LED2_ON LED2_PORT &= ~(1<<LED2_PINN)
+#define LED3_ON LED3_PORT &= ~(1<<LED3_PINN)
+#define LED4_ON LED4_PORT &= ~(1<<LED4_PINN)
+
+
+#endif
