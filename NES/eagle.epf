@@ -332,11 +332,12 @@ UsedLibrary="/Applications/EAGLE/lbr/xilinx-xc9.lbr"
 UsedLibrary="/Applications/EAGLE/lbr/xilinx-xcv.lbr"
 UsedLibrary="/Applications/EAGLE/lbr/zetex.lbr"
 UsedLibrary="/Applications/EAGLE/lbr/zilog.lbr"
+UsedLibrary="/Users/seb/Documents/eagle/SparkFun.lbr"
 
 [Win_1]
 Type="Control Panel"
 Loc="66 22 1599 1177"
-State=2
+State=1
 Number=0
 
 [Desktop]
