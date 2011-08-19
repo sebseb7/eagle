@@ -2,10 +2,10 @@
 #define _LED_H
 
 
-#define LED1_PINN PORTC0
-#define LED2_PINN PORTC1
-#define LED3_PINN PORTC2
-#define LED4_PINN PORTC3
+#define LED1_PINN PORTC3
+#define LED2_PINN PORTC2
+#define LED3_PINN PORTC1
+#define LED4_PINN PORTC0
 
 #define LED1_PORT PORTC
 #define LED2_PORT PORTC

@@ -6,9 +6,9 @@
 #define SPI_DDR DDRB	// DDR of SPI port
 #define SPI_PORT PORTB	// SPI port
 
-#define SPI_MOSI PORTB3	// MOSI pin (Master out, Slave in)
-#define SPI_MISO PORTB4	// MISO pin (Master in, Slave out)
-#define SPI_SCK PORTB5	// SCK pin (SPI clock)
+#define SPI_MOSI PORTB5	// MOSI pin (Master out, Slave in)
+#define SPI_MISO PORTB6	// MISO pin (Master in, Slave out)
+#define SPI_SCK PORTB7	// SCK pin (SPI clock)
 
 #define SPI_WAIT()              while ((SPSR & (1<<SPIF)) == 0);
 
