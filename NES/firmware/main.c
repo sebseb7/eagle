@@ -15,8 +15,8 @@ volatile uint8_t keyState = 0 ; // bit0..7 : up,down,left,right,select,start,a,b
 volatile uint8_t blink = 0;
 volatile uint8_t timeout = 0;
 
-//uint8_t my_addr[5] = { 0x98, 0x76, 0x54, 0x32, 0x10 };
-//uint8_t station_addr[5] = { 0xE4, 0xE4, 0xE4, 0xE4, 0xE4 };
+uint8_t my_addr[5] = { 0x98, 0x76, 0x54, 0x32, 0x10 };
+uint8_t station_addr[5] = { 0xE4, 0xE4, 0xE4, 0xE4, 0xE4 };
 
 volatile uint8_t keyInt = 0;
 uint8_t sendKeys = 0;
@@ -37,6 +37,7 @@ void powerOff(void);
 ISR(PCINT0_vect)
 {
 	keyInt = 1;
+//	inthandl();
 }
 
 ISR(PCINT1_vect)
@@ -46,8 +47,8 @@ ISR(PCINT1_vect)
 
 ISR(PCINT2_vect)
 {
-//	inthandl();
 	keyInt = 1;
+//	inthandl();
 }
 
 ISR(PCINT3_vect)
@@ -93,11 +94,13 @@ int main (void)
 	KEY_START_PORT  |= (1<<KEY_START_PINN);
 	KEY_SELECT_PORT |= (1<<KEY_SELECT_PINN);
 
-//	PORTD |= (1<<PORTD3);//IRQ		PCINT19	/ PCIE2
+
+	PORTA |= (1<<PORTA4);//IRQ		PCINT4	/ PCIE0
+	PCMSK2 |= (1<<PCINT4);//IRQ
 
 
 	// pullup for usbsense
-	USBSENSE_PORT |= (1<<USBSENSE_PINN);
+//	USBSENSE_PORT |= (1<<USBSENSE_PINN);
 
 	//switch LEDs to OFF and enable LED PINs as output
 	LED1_OFF;
@@ -127,7 +130,7 @@ int main (void)
 
 
 
-//	PCMSK2 |= (1<<PCINT19);//IRQ
+//	PCICR |= (1<<PCIE0)|(1<<PCIE1)|(1<<PCIE2);
 	PCICR |= (1<<PCIE0)|(1<<PCIE1)|(1<<PCIE2)|(1<<PCIE3);
 	 
 
@@ -138,11 +141,18 @@ int main (void)
 	TIMSK1 |= (1<<TOIE1);
 
 
-	RadioInit();
+//	RadioInit();
+
 
 	_delay_ms(50);
-
 	sei();
+
+    Radio_Init();
+/*	_delay_ms(50);
+	Radio_Configure_Rx(RADIO_PIPE_0, my_addr, ENABLE);
+	Radio_Configure(RADIO_1MBPS, RADIO_HIGHEST_POWER);*/
+                
+
 
 	while(1)
 	{
@@ -157,8 +167,22 @@ int main (void)
 		if(sendKeys == 1)
 		{
 			sendKeys = 0;
-			uint8_t bat = 0;
-			RadioSend(keyState,bat);
+			LED2_TOGGLE;
+//			uint8_t bat = 0;
+//			RadioSend(keyState,bat);
+
+
+/*			radiopacket_t packet;
+			packet.type = MESSAGE;
+			memcpy(packet.payload.message.address, my_addr, RADIO_ADDRESS_LENGTH);
+			packet.payload.message.messageid = 55;
+
+			packet.payload.message.messagecontent[0] = keyState;
+
+		 	Radio_Set_Tx_Addr(station_addr);
+	 
+		 	Radio_Transmit(&packet, RADIO_RETURN_ON_TX);*/
+		// 	Radio_Transmit(&packet, RADIO_WAIT_FOR_TX);
 		}
 	}
 }
@@ -211,6 +235,7 @@ void checkKeys(void)
 		_delay_us(100);
 	}
 	
+	//	LED2_TOGGLE;
 
 	if(keyState != tmpKeyState)
 	{
@@ -261,3 +286,25 @@ void powerOff(void)
 		LED4_TOGGLE;
 	}
 }
+
+		
+
+
+void radio_rxhandler(uint8_t pipe_number)
+{
+
+	radiopacket_t packet;
+
+	if (Radio_Receive(&packet) != RADIO_RX_MORE_PACKETS)
+	{
+		// if there are no more packets on the radio, clear the receive flag;
+		// otherwise, we want to handle the next packet on the next loop iteration.
+	}
+
+	
+	if (packet.type == ACK)
+	{
+		LED3_TOGGLE;
+	}
+}
+
