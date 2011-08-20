@@ -15,7 +15,7 @@ volatile uint8_t keyState = 0 ; // bit0..7 : up,down,left,right,select,start,a,b
 volatile uint8_t blink = 0;
 volatile uint8_t timeout = 0;
 
-uint8_t my_addr[5] = { 0x98, 0x76, 0x54, 0x32, 0x10 };
+uint8_t my_addr[5] = { 0x98, 0x76, 0x54, 0x32, 0x11 };
 uint8_t station_addr[5] = { 0xE4, 0xE4, 0xE4, 0xE4, 0xE4 };
 
 volatile uint8_t keyInt = 0;
@@ -37,7 +37,7 @@ void powerOff(void);
 ISR(PCINT0_vect)
 {
 	keyInt = 1;
-//	inthandl();
+	inthandl();
 }
 
 ISR(PCINT1_vect)
@@ -60,7 +60,7 @@ ISR(PCINT3_vect)
 ISR(TIMER1_OVF_vect)
 {
 	blink++;
-	if(blink == 5)
+	if(blink == 20)
 	{
 		blink = 0;
 		LED4_TOGGLE;
@@ -96,7 +96,7 @@ int main (void)
 
 
 	PORTA |= (1<<PORTA4);//IRQ		PCINT4	/ PCIE0
-	PCMSK2 |= (1<<PCINT4);//IRQ
+	PCMSK0 |= (1<<PCINT4);//IRQ
 
 
 	// pullup for usbsense
@@ -106,7 +106,7 @@ int main (void)
 	LED1_OFF;
 	LED2_OFF;
 	LED3_OFF;
-	LED4_OFF;
+	LED4_ON;
 	LED1_DDR |= (1<<LED1_PINN);
 	LED2_DDR |= (1<<LED2_PINN);
 	LED3_DDR |= (1<<LED3_PINN);
@@ -148,9 +148,9 @@ int main (void)
 	sei();
 
     Radio_Init();
-/*	_delay_ms(50);
+	_delay_ms(50);
 	Radio_Configure_Rx(RADIO_PIPE_0, my_addr, ENABLE);
-	Radio_Configure(RADIO_1MBPS, RADIO_HIGHEST_POWER);*/
+	Radio_Configure(RADIO_1MBPS, RADIO_HIGHEST_POWER);
                 
 
 
@@ -172,16 +172,18 @@ int main (void)
 //			RadioSend(keyState,bat);
 
 
-/*			radiopacket_t packet;
+			radiopacket_t packet;
 			packet.type = MESSAGE;
 			memcpy(packet.payload.message.address, my_addr, RADIO_ADDRESS_LENGTH);
 			packet.payload.message.messageid = 55;
 
-			packet.payload.message.messagecontent[0] = keyState;
-
+            packet.payload.message.messagecontent[0] = 1;
+			packet.payload.message.messagecontent[1] = keyState;
+			packet.payload.message.messagecontent[2] = 100;
+                                    
 		 	Radio_Set_Tx_Addr(station_addr);
 	 
-		 	Radio_Transmit(&packet, RADIO_RETURN_ON_TX);*/
+		 	Radio_Transmit(&packet, RADIO_RETURN_ON_TX);
 		// 	Radio_Transmit(&packet, RADIO_WAIT_FOR_TX);
 		}
 	}
@@ -251,7 +253,7 @@ void checkKeys(void)
 
 void checkOff(void)
 {
-	if(keyState == ((1<<KEY_A)|(1<<KEY_B)|(1<<KEY_UP)|(1<<KEY_LEFT)) )
+	if(keyState == ((1<<KEY_A)|(1<<KEY_B)|(1<<KEY_SELECT)) )
 //	if(keyState == (1<<KEY_SELECT))
 	{
 		powerOff();

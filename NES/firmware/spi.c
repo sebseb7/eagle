@@ -5,18 +5,17 @@
 
 #define SPI_DDR DDRB	// DDR of SPI port
 #define SPI_PORT PORTB	// SPI port
-
 #define SPI_MOSI PORTB5	// MOSI pin (Master out, Slave in)
 #define SPI_MISO PORTB6	// MISO pin (Master in, Slave out)
 #define SPI_SCK PORTB7	// SCK pin (SPI clock)
+#define SPI_SS PORTB4	// SS pin (Slave Select)
 
-#define SPI_WAIT()              while ((SPSR & (1<<SPIF)) == 0);
+#define SPI_WAIT()              while ((SPSR & _BV(SPIF)) == 0);
 
 void SPI_Init()
 {
-    SPI_DDR |= ((1<<SPI_MOSI)|(1<<SPI_SCK));
-
-	SPCR = ((1<<SPE)|(1<<MSTR));
+    SPI_DDR |= (_BV(SPI_MOSI) | _BV(SPI_SCK) | _BV(SPI_SS));
+	SPCR = _BV(SPE) | _BV(MSTR);
 }
 
 void SPI_ReadWrite_Block(uint8_t* data, uint8_t* buffer, uint8_t len)

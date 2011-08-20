@@ -66,7 +66,7 @@ static uint8_t set_register(radio_register_t reg, uint8_t* value, uint8_t len)
 	CSN_LOW();
 
 	status = SPI_Write_Byte(W_REGISTER | (REGISTER_MASK & reg));
-//	SPI_Write_Block(value, len);
+	SPI_Write_Block(value, len);
 
 	CSN_HIGH();
 
@@ -188,7 +188,6 @@ static void configure_registers(void)
 	value = ADDRESS_LENGTH - 2;			// 0b11 for 5 bytes, 0b10 for 4 bytes, 0b01 for 3 bytes
 	set_register(SETUP_AW, &value, 1);
 
-
 	// set Enhanced Shockburst retry to every 586 us, up to 5 times.  If packet collisions are a problem even with AA enabled,
 	// then consider changing the retry delay to be different on the different stations so that they do not keep colliding on each retry.
 	value = 0x15;
@@ -212,8 +211,8 @@ static void configure_registers(void)
     set_register(STATUS, &value, 1);
 
     // flush the FIFOs in case there are old data in them.
-//	send_instruction(FLUSH_TX, NULL, NULL, 0);
-//	send_instruction(FLUSH_RX, NULL, NULL, 0);
+	send_instruction(FLUSH_TX, NULL, NULL, 0);
+	send_instruction(FLUSH_RX, NULL, NULL, 0);
 }
 
 void Radio_Init()
