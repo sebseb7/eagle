@@ -1,5 +1,10 @@
 /*****************************************************************************
 *
+* Minimal Bootloader for Atmega644(p/a)
+* 
+*
+* Based on:
+*
 * AVRPROG compatible boot-loader
 * Version  : 0.85 (Dec. 2008)
 * Compiler : avr-gcc 4.1.2 / avr-libc 1.4.6
@@ -17,32 +22,8 @@
 *            work. No warranty! (Yes, you can insert the BSD
 *            license here)
 *
-* Tested with ATmega8, ATmega16, ATmega162, ATmega32, ATmega324P,
-*             ATmega644, ATmega644P, ATmega128, AT90CAN128
-*
-* - Initial versions have been based on the Butterfly bootloader-code
-*   by Atmel Corporation (Authors: BBrandal, PKastnes, ARodland, LHM)
-*
-****************************************************************************
-*
-*  See the makefile and readme.txt for information on how to adapt 
-*  the linker-settings to the selected Boot Size (BOOTSIZE=xxxx) and 
-*  the MCU-type. Other configurations futher down in this file.
-*
-*  With BOOT_SIMPLE, minimal features and discarded int-vectors
-*  this bootloader has should fit into a a 512 word (1024, 0x400 bytes) 
-*  bootloader-section. 
-*
-****************************************************************************/
-/*
-	TODOs:
-	- check lock-bits set
-	- __bad_interrupt still linked even with modified 
-	  linker-scripts which needs a default-handler,
-	  "wasted": 3 words for AVR5 (>8kB), 2 words for AVR4
-	- Check watchdog-disable-function in avr-libc.
-*/
-// tabsize: 4
+******************************************************************************/
+
  
 /* MCU frequency */
 #ifndef F_CPU
@@ -108,12 +89,10 @@
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
 #include <avr/interrupt.h>
-#include <util/delay.h>
 
 #include "chipdef.h"
 
 uint8_t gBuffer[SPM_PAGESIZE];
-
 
 static void sendchar(uint8_t data)
 {

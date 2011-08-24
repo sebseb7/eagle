@@ -4,10 +4,10 @@ MCU = atmega644p
 
 
 #/* Select Boot Size in Words (select one, comment out the others) */
-## BOOTSIZE=512
-## BOOTSIZE=1024
-## BOOTSIZE=2048
-BOOTSIZE=4096
+##BOOTSIZE=512 #(will not fit)
+BOOTSIZE=1024
+##BOOTSIZE=2048
+##BOOTSIZE=4096
 
 
 
@@ -52,6 +52,24 @@ ifeq ($(BOOTSIZE), 4096)
 endif
 endif
 
+ifeq ($(MCU), atmega88pa)
+ifeq ($(BOOTSIZE), 128)
+	MT_BOOTLOADER_ADDRESS = 0x1F00
+	FUSE_SETTINGS = -U lfuse:w:0xd6:m -U hfuse:w:0xdf:m -U efuse:w:0xfe:m
+endif
+ifeq ($(BOOTSIZE), 256)
+	MT_BOOTLOADER_ADDRESS = 0x1E00
+	FUSE_SETTINGS = -U lfuse:w:0xd6:m -U hfuse:w:0xdf:m -U efuse:w:0xfc:m
+endif
+ifeq ($(BOOTSIZE), 512)
+	MT_BOOTLOADER_ADDRESS = 0x1C00
+	FUSE_SETTINGS = -U lfuse:w:0xd6:m -U hfuse:w:0xdf:m -U efuse:w:0xfa:m
+endif
+ifeq ($(BOOTSIZE), 1024)
+	MT_BOOTLOADER_ADDRESS = 0x1800
+	FUSE_SETTINGS = -U lfuse:w:0xd6:m -U hfuse:w:0xdf:m -U efuse:w:0xf8:m
+endif
+endif
 
 
 # Output format. (can be srec, ihex, binary)
@@ -179,7 +197,6 @@ LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
 # MT_BOOTLOADER_ADDRESS (=Start of Boot Loader section
 # in bytes - not words) as defined above.
 LDFLAGS += -Wl,--section-start=.text=$(MT_BOOTLOADER_ADDRESS)
-
 
 # Programming support using avrdude. Settings and variables.
 
