@@ -255,6 +255,15 @@ int main(void)
 	BLDDR  &= ~(1<<BLPNUM);		// set as Input
 	BLPORT |= (1<<BLPNUM);		// Enable pullup
 
+	
+
+	if ( (BLPIN & (1<<BLPNUM)) & ( GPIOR2==0 ) ) {
+		// jump to main app if pin is not grounded and GPIOR2 is zero
+		BLPORT &= ~(1<<BLPNUM);		// set to default		
+		jump_to_app();			// Jump to application sector
+	}
+
+
 	// Set baud rate
 	UART_BAUD_HIGH = (UART_CALC_BAUDRATE(BAUDRATE)>>8) & 0xFF;
 	UART_BAUD_LOW = (UART_CALC_BAUDRATE(BAUDRATE) & 0xFF);
@@ -265,16 +274,6 @@ int main(void)
 
 	UART_CTRL = UART_CTRL_DATA;
 	UART_CTRL2 = UART_CTRL2_DATA;
-	
-
-	if ((BLPIN & (1<<BLPNUM))) {
-		// jump to main app if pin is not grounded
-		BLPORT &= ~(1<<BLPNUM);		// set to default		
-#ifdef UART_DOUBLESPEED
-		UART_STATUS &= ~( 1<<UART_DOUBLE );
-#endif
-		jump_to_app();			// Jump to application sector
-	}
 
 
 	for(;;) {
