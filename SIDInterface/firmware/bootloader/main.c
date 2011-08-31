@@ -89,6 +89,7 @@
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 #include "chipdef.h"
 
@@ -228,20 +229,21 @@ static void (*jump_to_app)(void) = 0x0000;
 
 int main(void)
 {
+
+#ifdef WDT_OFF_SPECIAL
+#warning "using target specific watchdog_off"
+    bootloader_wdt_off();
+#else
+	cli();
+	wdt_reset();
+	wdt_disable();
+#endif
+
 	uint16_t address = 0;
 	uint8_t device = 0, val;
 
 	BLDDR  &= ~(1<<BLPNUM);		// set as Input
 	BLPORT |= (1<<BLPNUM);		// Enable pullup
-
-	
-
-	if ( (BLPIN & (1<<BLPNUM)) & ( GPIOR2==0 ) ) {
-		// jump to main app if pin is not grounded and GPIOR2 is zero
-		BLPORT &= ~(1<<BLPNUM);		// set to default		
-		jump_to_app();			// Jump to application sector
-	}
-
 
 	// Set baud rate
 	UART_BAUD_HIGH = (UART_CALC_BAUDRATE(BAUDRATE)>>8) & 0xFF;
@@ -254,6 +256,20 @@ int main(void)
 	UART_CTRL = UART_CTRL_DATA;
 	UART_CTRL2 = UART_CTRL2_DATA;
 
+
+	if ((BLPIN & (1<<BLPNUM)) && (GPIOR2 == 0) ) {
+//	if ( (BLPIN & (1<<BLPNUM)) && ( GPIOR2==0 ) ) {
+		// jump to main app if pin is not grounded and GPIOR2 is zero
+		BLPORT &= ~(1<<BLPNUM);		// set to default		
+		jump_to_app();			// Jump to application sector
+	}
+	
+	if(GPIOR2 != 0)
+    {
+		sendchar('?');
+		GPIOR2=0;
+	}
+                        
 
 	for(;;) {
 		val = recvchar();

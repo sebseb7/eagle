@@ -29,4 +29,20 @@
 #define UART_DATA	    UDR1
 #endif
 
+#define WDT_OFF_SPECIAL
+
+static inline void bootloader_wdt_off(void)
+{
+    cli();
+	wdt_reset();
+	/* Clear WDRF in MCUSR */
+	MCUSR &= ~(1<<WDRF);
+	/* Write logical one to WDCE and WDE */
+	/* Keep old prescaler setting to prevent unintentional time-out */
+	WDTCSR |= (1<<WDCE) | (1<<WDE);
+	/* Turn off WDT */
+	WDTCSR = 0x00;
+}
+                                    
+
 #endif // #ifndef _MEGA644_H_

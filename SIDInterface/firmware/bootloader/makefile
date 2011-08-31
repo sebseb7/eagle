@@ -1,13 +1,14 @@
 # MCU name
-MCU = atmega644p
+MCU = atmega644pa
+MCU_AVRDUDE = atmega644p
 ## MCU = atmega644
 
 
 #/* Select Boot Size in Words (select one, comment out the others) */
 ##BOOTSIZE=512 #(will not fit)
-BOOTSIZE=1024
+##BOOTSIZE=1024
 ##BOOTSIZE=2048
-##BOOTSIZE=4096
+BOOTSIZE=4096
 
 
 
@@ -34,6 +35,26 @@ endif
 
 ##
 ifeq ($(MCU), atmega644p)
+ifeq ($(BOOTSIZE), 512)
+	MT_BOOTLOADER_ADDRESS = 0xFC00
+	FUSE_SETTINGS = -U lfuse:w:0xd6:m -U hfuse:w:0xde:m
+endif
+ifeq ($(BOOTSIZE), 1024)
+	MT_BOOTLOADER_ADDRESS = 0xF800
+	FUSE_SETTINGS = -U lfuse:w:0xd6:m -U hfuse:w:0xdc:m
+endif
+ifeq ($(BOOTSIZE), 2048)
+	MT_BOOTLOADER_ADDRESS = 0xF000
+	FUSE_SETTINGS = -U lfuse:w:0xd6:m -U hfuse:w:0xda:m
+endif
+ifeq ($(BOOTSIZE), 4096)
+	MT_BOOTLOADER_ADDRESS = 0xE000
+	FUSE_SETTINGS = -U lfuse:w:0xd6:m -U hfuse:w:0xd8:m
+endif
+endif
+
+##
+ifeq ($(MCU), atmega644pa)
 ifeq ($(BOOTSIZE), 512)
 	MT_BOOTLOADER_ADDRESS = 0xFC00
 	FUSE_SETTINGS = -U lfuse:w:0xd6:m -U hfuse:w:0xde:m
@@ -232,7 +253,7 @@ AVRDUDE_WRITE_FUSE = $(FUSE_SETTINGS)
 # to submit bug reports.
 #AVRDUDE_VERBOSE = -v -v
 
-AVRDUDE_FLAGS = -p $(MCU) -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER)
+AVRDUDE_FLAGS = -p $(MCU_AVRDUDE) -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER)
 AVRDUDE_FLAGS += $(AVRDUDE_NO_VERIFY)
 AVRDUDE_FLAGS += $(AVRDUDE_VERBOSE)
 AVRDUDE_FLAGS += $(AVRDUDE_ERASE_COUNTER)

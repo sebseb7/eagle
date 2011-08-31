@@ -26,6 +26,9 @@ typedef uint8_t pagebuf_t;
 #elif defined(__AVR_ATmega644P__)
 #include "mega644p.h"
 
+#elif defined(__AVR_ATmega644PA__)
+#include "mega644p.h"
+
 #elif defined(__AVR_ATmega88__)
 #include "mega88.h"
 
