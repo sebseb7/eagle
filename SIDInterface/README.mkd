@@ -1,7 +1,0 @@
-This will be the sound module of the Pentawall.
-
-
-It utilizes a MOS 6581 (original C64 sound-chip) for that.
-
-
-![pcb](/sebseb7/eagle/raw/master/SIDInterface/sidModule.png)
