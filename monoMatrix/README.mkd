@@ -1,0 +1,19 @@
+monoMatrix
+
+8x8 pixel per Module
+9x4 Modules
+72x32 Pixel
+2304 LEDs
+
+using 8x6 font (is 7x5 + 1px space)
+12x4 characters
+
+sink: ULN2803
+source: 74HC595N
+mcu: atmega88pa
+
+
+pixelDensitiy: 1pixel per cm
+as module is 8x8cm (contains only the LEDs)
+each module has a "backpack" PCB, that contains the ICs
+
