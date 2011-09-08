@@ -1,9 +1,11 @@
-MCU = atmega644p
+MCU = atmega644pa
 #MCU = atmega168p
 
 #MCU = atmega644
 F_CPU = 20000000
-FUSE_SETTINGS = -U lfuse:w:0xd6:m -U hfuse:w:0xd9:m
+
+#avr default:
+FUSE_SETTINGS = -U lfuse:w:0xd6:m -U hfuse:w:0xd9:m -U efuse:w:0xff:m
 
 
 # Output format. (can be srec, ihex, binary)
@@ -125,7 +127,8 @@ AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep
 
 #avrdude -c avrispv2 -P usb -p m32 -U flash:w:blink.hex
 #AVRDUDE_FLAGS = -p m168 -F -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER)
-AVRDUDE_FLAGS = -p $(MCU) -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER)
+AVRDUDE_FLAGS = -p m644p -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER)
+#AVRDUDE_FLAGS = -p $(MCU) -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER)
 #AVRDUDE_FLAGS = -p $(MCU) -c $(AVRDUDE_PROGRAMMER)
 
 # Uncomment the following if you want avrdude's erase cycle counter.

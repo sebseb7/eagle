@@ -3,6 +3,8 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 //#include <util/atomic.h>
+//#include <avr/wdt.h>
+
 
 #include "main.h"
 #include "radio.h"
@@ -72,6 +74,7 @@ ISR(TIMER1_OVF_vect)
 		powerOff();
 	}
 	
+//	wdt_reset();
 	
 }
 
@@ -80,7 +83,11 @@ ISR(TIMER1_OVF_vect)
 
 int main (void)
 {
-
+	// 4s watchdog timer
+	WDTCSR |= (1<<WDCE); 
+	WDTCSR |= (1<<WDP3); 
+	
+	
 	//pull-ups for all switches
 	
 	KEY_UP_PORT     |= (1<<KEY_UP_PINN);
@@ -102,17 +109,47 @@ int main (void)
 	// pullup for usbsense
 //	USBSENSE_PORT |= (1<<USBSENSE_PINN);
 
-	//switch LEDs to OFF and enable LED PINs as output
-	LED1_OFF;
-	LED2_OFF;
-	LED3_OFF;
-	LED4_ON;
+
+	//enable LED PINs as output
 	LED1_DDR |= (1<<LED1_PINN);
 	LED2_DDR |= (1<<LED2_PINN);
 	LED3_DDR |= (1<<LED3_PINN);
 	LED4_DDR |= (1<<LED4_PINN);
 
-	
+	if( (MCUSR & (1<<WDRF)) == (1<<WDRF))
+	{
+		LED1_ON;
+	}
+	else
+	{
+		LED1_OFF;
+	}
+	if( (MCUSR & (1<<BORF)) == (1<<BORF))
+	{
+		LED2_ON;
+	}
+	else
+	{
+		LED2_OFF;
+	}
+	if( (MCUSR & (1<<EXTRF)) == (1<<EXTRF))
+	{
+		LED3_ON;
+	}
+	else
+	{
+		LED3_OFF;
+	}
+	if( (MCUSR & (1<<PORF)) == (1<<PORF))
+	{
+		LED4_ON;
+	}
+	else
+	{
+		LED4_OFF;
+	}
+	_delay_ms(600);
+
 
 	// set OFF as output
 	POWEROFF_DDR |= (1<<POWEROFF_PINN);
@@ -141,11 +178,8 @@ int main (void)
 	TIMSK1 |= (1<<TOIE1);
 
 
-//	RadioInit();
-
-
-	_delay_ms(50);
 	sei();
+
 
     Radio_Init();
 	_delay_ms(50);
