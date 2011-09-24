@@ -121,140 +121,153 @@ int main (void)
 //	};
 
 
-
-
-
-	uint8_t pixel_r = 0;
-	uint8_t pixel_g = 0;
-	uint8_t pixel_b = 0;
-	uint8_t pixel_nr = 0;
+	uint8_t i = 0;
 	
-	uint8_t frameBuffer[8*3];
-	for(uint8_t i = 0;i<(8*3);i++)
+/*	for(i=0;i<200;i++)
 	{
-		frameBuffer[i]=0;
+		SetLed(0,i,i,i);
+		_delay_ms(20);
+		writeChannels();
 	}
-	
-	uint8_t data = 0;  
-	uint8_t state = 0;
-	uint8_t escape = 0;
-	uint8_t idx = 0;
-	uint8_t color_state = 0;
-	uint8_t x_state = 0;
-	uint8_t y_state = 0;
+*/
 
-
+/*	while(1)
+	{
+				SetLed(0,255,255,255);
+				writeChannels();
+	}
+*/
 	while(1)
 	{
-		if(USART0_Getc_nb(&data))
+
+		for(i=0;i<10;i++)
 		{
-
-			if(data == 0x42)
+			for(uint8_t j=0;j<10-i;j++)
 			{
-				// single pixel
-				state = 1;
-				idx = 0;
-				continue;
+				SetLed(0,255,255,255);
+				writeChannels();
+				_delay_ms(i*10);
+				SetLed(0,0,0,255);
+				writeChannels();
+				_delay_ms(i*10);
 			}
-			if(data == 0x23)
-			{
-				// full frame
-				state = 2;
-
-				color_state = 0;
-				x_state = 0;
-				y_state = 0;
-				continue;
-			}
-			if(data == 0x65)
-			{
-				escape = 1;
-				continue;
-			}
-			if(data == 0x66)
-			{
-				// bootloader
-				state = 3;
-				continue;
-			}
-			if(escape == 1)
-			{
-				escape = 0;
-				if(data == 0x01)
-				{
-					data = 0x23;
-				}
-				else if(data == 0x02)
-				{
-					data = 0x42;
-				}
-				else if(data == 0x03)
-				{
-					data = 0x65;
-				}
-				else if(data == 0x04)
-				{
-					data = 0x66;
-				}
-			}
-			
-		
-			if(state == 1)
-			{
-				// wait for our pixel
-				if(idx == 0)
-				{
-					pixel_nr = data;
-				}
-				if(idx == 1)
-				{
-					pixel_r = data;
-				}
-				if(idx == 2)
-				{
-					pixel_g = data;
-				}
-				if(idx == 3)
-				{
-					pixel_b = data;
-					if(pixel_nr == 0)
-					{
-						SetLed(0,pixel_r,pixel_g,pixel_b);
-					}
-					else
-					{
-						SetLed(pixel_nr,pixel_r,pixel_g,pixel_b);
-					}
-				}
-				idx++;
-				
-			}
-
-			if(state == 2)
-			{
-				// wait for our part of the frame
-
-
-			}
-
-			if(state == 3)
-			{
-				if(data == 0xfe)
-				{
-					// jump to bootloader
-					GPIOR2=255;
-					AppPtr_t AppStartPtr = (AppPtr_t)0x1800; 
-					AppStartPtr();
-				}
-				state = 0;
-			}
-
 		}
-		if(pushData == 1)
+
+		for(i=0;i<20;i++)
 		{
-			pushData = 0;
+			for(uint8_t j=0;j<10-i;j++)
+			{
+				SetLed(0,0,255,0);
+				writeChannels();
+				_delay_ms(i*10);
+				SetLed(0,0,0,255);
+				writeChannels();
+				_delay_ms(i*10);
+			}
+		}
+
+		for(i=0;i<20;i++)
+		{
+			for(uint8_t j=0;j<10-i;j++)
+			{
+				SetLed(0,0,255,0);
+				writeChannels();
+				_delay_ms(i*10);
+				SetLed(0,255,0,0);
+				writeChannels();
+				_delay_ms(i*10);
+			}
+		}
+
+
+		for(uint8_t j=50;j<100;j+=10)
+		{
+		for(i=0;i<5;i++)
+		{
+			SetLed(0,255,0,0);
 			writeChannels();
+			_delay_ms(j);
+			SetLed(0,0,0,255);
+			writeChannels();
+			_delay_ms(j);
 		}
+		}
+
+		for(uint8_t j=50;j<100;j+=10)
+		{
+		for(i=0;i<5;i++)
+		{
+			SetLed(0,0,255,0);
+			writeChannels();
+			_delay_ms(j);
+			SetLed(0,255,255,0);
+			writeChannels();
+			_delay_ms(j);
+		}
+		}
+
+		for(uint8_t j=0;j<3;j++)
+		{
+			for(i=1;i<4;i++)
+			{
+				SetLed(0,0,0,0);
+				SetLed(i*2,255,0,0);
+				SetLed(i*2-1,255,0,0);
+				writeChannels();
+				_delay_ms(200);
+			}
+			for(i=4;i>1;i--)
+			{
+				SetLed(0,0,0,0);
+				SetLed(i*2,255,0,0);
+				SetLed(i*2-1,255,0,0);
+				writeChannels();
+				_delay_ms(200);
+			}
+		}
+
+		for(i=0;i<50;i++)
+		{
+			SetLed(0,255,0,0);
+			writeChannels();
+			_delay_ms(30);
+			SetLed(0,0,255,0);
+			writeChannels();
+			_delay_ms(30);
+			SetLed(0,0,0,255);
+			writeChannels();
+			_delay_ms(30);
+		}
+
+		for(i=0;i<50;i++)
+		{
+			SetLed(0,255,0,0);
+			writeChannels();
+			_delay_ms(10);
+			SetLed(0,0,255,0);
+			writeChannels();
+			_delay_ms(10);
+			SetLed(0,0,0,255);
+			writeChannels();
+			_delay_ms(10);
+		}
+
+		for(i=0;i<100;i++)
+		{
+			SetLed(0,0,255,255);
+			writeChannels();
+			_delay_ms(3);
+			SetLed(0,255,0,255);
+			writeChannels();
+			_delay_ms(3);
+			SetLed(0,255,255,0);
+			writeChannels();
+			_delay_ms(3);
+		}
+
+
 	}
+
+
 }
 

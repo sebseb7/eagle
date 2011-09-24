@@ -37,8 +37,16 @@ uint16_t pwmtable_8[256]  PROGMEM = {
 2984, 3091, 3202, 3316, 3435, 3558, 3686, 3818, 3954, 4095 };
 
 
-//led numbering (1 ist lower left, next to right)
-uint8_t idx[8] = {6,7,0,1,5,4,3,2};
+uint8_t idx[24] = {
+	8,6,17,
+	23,0,4,
+	11,10,15,
+	21,19,2,
+	9,13,12,
+	22,1,3,
+	7,14,16,
+	18,20,5
+	};
 
 void writeChannels(void);
 
@@ -53,17 +61,17 @@ void SetLed(uint8_t led,uint8_t red,uint8_t green, uint8_t blue)
 
 	if(led > 0)
 	{
-		ch[idx[led-1]*3+2]=pgm_read_word(pwmtable_8+blue);
-		ch[idx[led-1]*3+1]=pgm_read_word(pwmtable_8+green);
-		ch[idx[led-1]*3]=pgm_read_word(pwmtable_8+red);
+		ch[idx[(led-1)*3+2]]=pgm_read_word(pwmtable_8+blue);
+		ch[idx[(led-1)*3+1]]=pgm_read_word(pwmtable_8+green);
+		ch[idx[(led-1)*3  ]]=pgm_read_word(pwmtable_8+red);
 	}
 	else
 	{
 		for(uint8_t i = 0;i<8;i++)
 		{
-			ch[idx[i]*3+2]=pgm_read_word(pwmtable_8+blue);
-			ch[idx[i]*3+1]=pgm_read_word(pwmtable_8+green);
-			ch[idx[i]*3]=pgm_read_word(pwmtable_8+red);
+			ch[idx[i*3+2]]=pgm_read_word(pwmtable_8+blue);
+			ch[idx[i*3+1]]=pgm_read_word(pwmtable_8+green);
+			ch[idx[i*3  ]]=pgm_read_word(pwmtable_8+red);
 		}
 	
 	}

@@ -10,6 +10,7 @@ volatile static uint8_t rxbuf0[UART_RXBUFSIZE];
 volatile static uint8_t *volatile rxhead0, *volatile rxtail0;
 volatile uint8_t xon = 0;
 
+typedef void (*AppPtr_t)(void) __attribute__ ((noreturn));
 
 ISR (USART_RX_vect)
 {
@@ -29,6 +30,13 @@ ISR (USART_RX_vect)
 				//set the CTS pin
 			}
         }
+        if(c == 0x1b)
+        {
+                            GPIOR2=255;
+                                                AppPtr_t AppStartPtr = (AppPtr_t)0x1800;
+                                                                    AppStartPtr();
+                                                                    }
+        
 }
 
 
