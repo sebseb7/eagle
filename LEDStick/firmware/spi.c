@@ -1,11 +1,16 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include <util/delay.h>
-
+#include <avr/interrupt.h>
 
 
 #include "main.h"
 #include "spi.h"
+#include "usart.h"
+
+typedef void (*AppPtr_t)(void) __attribute__ ((noreturn));
+
+
 
 volatile uint8_t newdata = 0;
 volatile uint8_t dirty = 0;
@@ -58,6 +63,20 @@ void SPI_send(uint8_t cData)
 
 void SetLed(uint8_t led,uint8_t red,uint8_t green, uint8_t blue)
 {
+
+    if(appStart == 1)
+        {
+                cli();
+                        while(1)
+                                {
+                                            GPIOR2=255;
+                                                        AppPtr_t AppStartPtr = (AppPtr_t)0x1800;
+                                                                    AppStartPtr();
+                                                                            }
+                                                                                }
+                                                                                
+                                                                                
+
 
 	if(led > 0)
 	{

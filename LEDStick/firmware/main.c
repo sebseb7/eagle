@@ -1,12 +1,3 @@
-// links neue messung , rechts allte messung mit mehr puffer
-// spanungen blau: 3.3-3.6 1800/4700 == 3,34(soll) 
-// rot : 2.5-2.9 1500/4700 == 3,19(soll) (3,208 ist) (mit 1200 muesste es bis 3,03 runter gehen)
-// gruen 3.5-3.9 2200/4700 == 3,55(soll)
-
-//alternativ blau: 2200/4700 == 3,55
-//alternativ gruen: 2700/4700 == 3,81
-
-
 #include <inttypes.h>
 #include <avr/io.h>
 #include <util/delay.h>
@@ -17,10 +8,7 @@
 #include "usart.h"
 
 
-//compute our position from this using addr
-#define DISPLAY_WIDTH 24
-#define DISPLAY_HEIGHT 24
-                                                                                                                                 // BLANC == PB2
+// BLANC == PB2
 // XLAT  == PB1
 // SCLK == SCK/PB5
 // SIN == MOSI/PB3
@@ -29,11 +17,10 @@
 
 typedef void (*AppPtr_t)(void) __attribute__ ((noreturn)); 
 
-uint8_t volatile pushData = 0;
+volatile uint8_t pushData = 0;
 
 ISR (TIMER1_OVF_vect)
 {
-//	writeChannels();
 	pushData = 1;
 }
 
@@ -70,8 +57,6 @@ int main (void)
 	DDRD &= ~(1<<PORTD3);
 	PORTC |= (1<<PORTC0)|(1<<PORTC1)|(1<<PORTC2)|(1<<PORTC3);
 	PORTD |= (1<<PORTD2)|(1<<PORTD3);
-	// wait for the pin to synchronize
-
 
 	//enable pullups ununsed pins
 	PORTD |= (1<<PORTD4);
@@ -109,37 +94,10 @@ int main (void)
 	//enable interrupts
 	sei();
 
-//	SetLed(0,255,255,255);
-//	writeChannels();writeChannels();
-//
-//	while(1)
-//	{
-	
-//		_delay_ms(100);
-//		SetLed(0,255,255,255);
-//		writeChannels();writeChannels();
-//	};
-
-
 	uint8_t i = 0;
 	
-/*	for(i=0;i<200;i++)
-	{
-		SetLed(0,i,i,i);
-		_delay_ms(20);
-		writeChannels();
-	}
-*/
-
-/*	while(1)
-	{
-				SetLed(0,255,255,255);
-				writeChannels();
-	}
-*/
 	while(1)
 	{
-
 		for(i=0;i<10;i++)
 		{
 			for(uint8_t j=0;j<10-i;j++)
@@ -206,13 +164,18 @@ int main (void)
 		}
 		}
 
+
+
 		for(uint8_t j=0;j<3;j++)
 		{
-			for(i=1;i<4;i++)
+			for(i=1;i<5;i++)
 			{
 				SetLed(0,0,0,0);
 				SetLed(i*2,255,0,0);
 				SetLed(i*2-1,255,0,0);
+
+				SetLed((5-i)*2,0,0,255);
+				SetLed((5-i)*2-1,0,0,255);
 				writeChannels();
 				_delay_ms(200);
 			}
@@ -221,10 +184,15 @@ int main (void)
 				SetLed(0,0,0,0);
 				SetLed(i*2,255,0,0);
 				SetLed(i*2-1,255,0,0);
+
+				SetLed((5-i)*2,0,0,255);
+				SetLed((5-i)*2-1,0,0,255);
 				writeChannels();
 				_delay_ms(200);
 			}
 		}
+
+
 
 		for(i=0;i<50;i++)
 		{
@@ -265,6 +233,39 @@ int main (void)
 			_delay_ms(3);
 		}
 
+
+		SetLed(0,0,0,0);
+
+		uint16_t q = 0;
+		uint16_t j = 1;
+		
+		for(q=1024;q>2;)
+		{
+			for(uint16_t v=0;v<j;v++)
+			{
+				SetLed(0,0,255,255);
+				writeChannels();
+				_delay_ms(q);
+				SetLed(0,255,0,255);
+				writeChannels();
+				_delay_ms(q);
+				SetLed(0,255,255,0);
+				writeChannels();
+				_delay_ms(q);
+				SetLed(0,255,0,0);
+				writeChannels();
+				_delay_ms(q);
+				SetLed(0,0,255,0);
+				writeChannels();
+				_delay_ms(q);
+				SetLed(0,0,0,255);
+				writeChannels();
+				_delay_ms(q);
+			}
+			j = j * 2;
+			
+			q = q >> 1;
+		}
 
 	}
 
