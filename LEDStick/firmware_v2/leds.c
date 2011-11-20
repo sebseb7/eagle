@@ -1,8 +1,6 @@
 #include <avr/io.h>
-#include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
-#include "main.h"
 #include "timer.h"
 #include "adc.h"
 #include "spi.h"

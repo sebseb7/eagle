@@ -1,7 +1,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include "main.h"
 
 volatile uint16_t adc_value = 0;
 

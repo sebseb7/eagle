@@ -1,8 +1,5 @@
 #include <avr/io.h>
-#include <avr/interrupt.h>
-#include <avr/pgmspace.h>
 
-#include "main.h"
 #include "spi.h"
 
 void SPI_send(uint8_t cData) 

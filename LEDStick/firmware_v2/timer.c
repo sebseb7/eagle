@@ -1,10 +1,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/pgmspace.h>
 
-#include "main.h"
 #include "timer.h"
-#include "adc.h"
 
 volatile uint8_t timeout = 0;
 volatile uint8_t newdata = 0;
