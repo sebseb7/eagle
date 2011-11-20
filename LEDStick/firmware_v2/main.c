@@ -22,10 +22,10 @@
 int main (void)
 {
 
-	LED_init();
 	SPI_init();
-	TIMER1_Init();
+	LED_init();
 	ADC_Init();
+	TIMER1_Init();
 
 	sei ();
 	
