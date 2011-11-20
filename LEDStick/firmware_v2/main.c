@@ -2,7 +2,6 @@
 #include <inttypes.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/eeprom.h>
 #include <util/delay.h>
 
 #include "main.h"
@@ -56,18 +55,20 @@ int main (void)
 
 	initialized = 1;
 
-	SetLed(0,0,0,255);
+	SetLed(0,0,10,0);
 	timeout = 2;
 	while(timeout);
+
 
 	while(1)
 	{
 		ani_battery();	
 		ani_rainbow();	
 		ani_c3d2();	
+		ani_bluewhite();	
+		ani_greenyellow();	
+		ani_redblue();	
 		ani_sectors();
-		
-		
 	}// while(1)
 	
 }	

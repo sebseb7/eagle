@@ -12,6 +12,7 @@ volatile uint8_t initialized = 0;
 
 uint16_t adc_event = 0;
 
+
 ISR(TIMER1_COMPA_vect)
 {
 	PORTD |= (1<<PORTD7);//blanc on
@@ -24,7 +25,8 @@ ISR(TIMER1_COMPA_vect)
 		newdata=0;
 	}
 
-	if(initialized==1)	PORTD &= ~(1<<PORTD7);//blanc off
+	if(initialized==1) PORTD &= ~(1<<PORTD7);//blanc off
+	
 	
 	adc_event++;
 	if(adc_event == 0xFFF)

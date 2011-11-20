@@ -14,7 +14,7 @@ void SPI_send(uint8_t cData)
 void SPI_init() 
 {
     // set mosi/sck out
-	DDRB = (1<<DDB5)|(1<<DDB3)|(1<<DDB2);
+	DDRB |= (1<<DDB5)|(1<<DDB3)|(1<<DDB2);
 	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
 }
 

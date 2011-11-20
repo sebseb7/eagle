@@ -6,6 +6,7 @@
 #include "timer.h"
 #include "adc.h"
 #include "spi.h"
+#include "leds.h"
 
 uint16_t pwmtable_8[256]  PROGMEM = { 
 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -67,87 +68,15 @@ uint16_t pwmtable_8[256]  PROGMEM = {
 
 void SetLed(uint8_t led,uint8_t red,uint8_t green, uint8_t blue)
 {
-	if(adc_value < 850)
-	{
-		red   = red>>1;
-		green = green>>1;
-		blue =  blue>>1;
-	} 
-    if(adc_value < 800)
-	{
-		red   = red>>2;
-		green = green>>2;
-		blue =  blue>>2;
-	} 
+	uint16_t red12 = pgm_read_word(pwmtable_8+red);
+	uint16_t green12 = pgm_read_word(pwmtable_8+green);
+	uint16_t blue12 = pgm_read_word(pwmtable_8+blue);
 
-
-	while(newdata!=0){};
-	PORTD &= ~(1<<PORTD5); // mode = GS
-	if((led==1)||(led==0))
-	{
-		l1r=pgm_read_word(pwmtable_8+red);
-		l1g=pgm_read_word(pwmtable_8+green);
-		l1b=pgm_read_word(pwmtable_8+blue);
-	}
-	if((led==2)||(led==0))
-	{
-		l2r=pgm_read_word(pwmtable_8+red);
-		l2g=pgm_read_word(pwmtable_8+green);
-		l2b=pgm_read_word(pwmtable_8+blue);
-	}
-	if((led==3)||(led==0))
-	{
-		l3r=pgm_read_word(pwmtable_8+red);
-		l3g=pgm_read_word(pwmtable_8+green);
-		l3b=pgm_read_word(pwmtable_8+blue);
-	}
-	if((led==4)||(led==0))
-	{
-		l4r=pgm_read_word(pwmtable_8+red);
-		l4g=pgm_read_word(pwmtable_8+green);
-		l4b=pgm_read_word(pwmtable_8+blue);
-	}
-	if((led==5)||(led==0))
-	{
-		l5r=pgm_read_word(pwmtable_8+red);
-		l5g=pgm_read_word(pwmtable_8+green);
-		l5b=pgm_read_word(pwmtable_8+blue);
-	}
-	// 24 byte GS
-
-		SPI_send(ch1>>4);
-		SPI_send((ch1<<4)|(l1r>>8));
-		SPI_send(l1r);
-		SPI_send(l1g>>4);
-		SPI_send((l1g<<4)|(l1b>>8));
-		SPI_send(l1b);
-		SPI_send(l2r>>4);
-		SPI_send((l2r<<4)|(l2g>>8));
-		SPI_send(l2g);
-		SPI_send(l2b>>4);
-		SPI_send((l2b<<4)|(l3b>>8));
-		SPI_send(l3b);
-		SPI_send(l3g>>4);
-		SPI_send((l3g<<4)|(l3r>>8));
-		SPI_send(l3r);
-		SPI_send(l4b>>4);
-		SPI_send((l4b<<4)|(l4g>>8));
-		SPI_send(l4g);
-		SPI_send(l4r>>4);
-		SPI_send((l4r<<4)|(l5r>>8));
-		SPI_send(l5r);
-		SPI_send(l5g>>4);
-		SPI_send((l5g<<4)|(l5b>>8));
-		SPI_send(l5b);
-
-	newdata=1;
+	SetLed12(led,red12,green12,blue12);
 }
 
 void SetLed12(uint8_t led,uint16_t red,uint16_t green, uint16_t blue)
 {
-//	red = red * 0.7;
-//	blue = blue * 0.7;
-//	green = green * 0.7;
 
 	if(adc_value < 850)
 	{

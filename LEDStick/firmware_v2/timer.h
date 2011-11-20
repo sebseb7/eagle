@@ -8,6 +8,4 @@ extern volatile uint8_t newdata;
 void TIMER1_Init (void);
 
 
-
-
 #endif
