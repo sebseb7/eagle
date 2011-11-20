@@ -25,24 +25,7 @@
 int main (void)
 {
 
-	
-
-	// latch aus
-	PORTB &= ~(1<<PORTB1);
-	// blank = high (all off)
-	PORTD |= (1<<PORTD7);
-	// mode = ground
-	PORTD &= ~(1<<PORTD5);
-//	PORTD |= (1<<PORTD5);
-
-	//latch out
-	DDRB |= (1<<DDB1);
-	//blank out
-	DDRD |= (1<<DDD7);
-	//mode out
-	DDRD |= (1<<DDD5);
-
-
+	LED_init();
 	SPI_init();
 	TIMER1_Init();
 	ADC_Init();
@@ -60,15 +43,17 @@ int main (void)
 	while(timeout);
 
 
+
 	while(1)
 	{
+		ani_c3d2();	
 		ani_battery();	
 		ani_rainbow();	
-		ani_c3d2();	
+		ani_sectors3();
 		ani_bluewhite();	
 		ani_greenyellow();	
 		ani_redblue();	
-		ani_sectors();
+		ani_sectors12();
 	}// while(1)
 	
 }	

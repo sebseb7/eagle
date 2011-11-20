@@ -10,7 +10,7 @@ volatile uint8_t timeout = 0;
 volatile uint8_t newdata = 0;
 volatile uint8_t initialized = 0;
 
-uint16_t adc_event = 0;
+uint16_t adc_timeout = 0;
 
 
 ISR(TIMER1_COMPA_vect)
@@ -28,10 +28,10 @@ ISR(TIMER1_COMPA_vect)
 	if(initialized==1) PORTD &= ~(1<<PORTD7);//blanc off
 	
 	
-	adc_event++;
-	if(adc_event == 0xFFF)
+	adc_timeout++;
+	if(adc_timeout == 0xFFF)//1Hz
 	{	
-		adc_event=0;
+		adc_timeout=0;
 		ADCSRA |= (1<<ADSC);
 
 		if(timeout != 0)

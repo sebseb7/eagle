@@ -237,5 +237,23 @@ void SetDC(uint8_t led,uint8_t red,uint8_t green, uint8_t blue)
 }
 
 
+void LED_init()
+{
 
 									
+	// latch aus
+	PORTB &= ~(1<<PORTB1);
+	// blank = high (all off)
+	PORTD |= (1<<PORTD7);
+	// mode = ground
+	PORTD &= ~(1<<PORTD5);
+//	PORTD |= (1<<PORTD5);
+
+	//latch out
+	DDRB |= (1<<DDB1);
+	//blank out
+	DDRD |= (1<<DDD7);
+	//mode out
+	DDRD |= (1<<DDD5);
+
+};

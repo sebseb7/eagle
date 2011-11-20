@@ -192,17 +192,17 @@ void ani_battery()
 	}
 }	
 
-void ani_sectors()
+void ani_sectors3()
 {
 	uint16_t delay=8;
 		
 	while(1)
 	{	
-		SetLed(0,255,0,0);
+		SetLed12(0,0xFFF,0x3FF,0x3FF);
 		_delay_ms(delay);
-		SetLed(0,0,0,255);
+		SetLed12(0,0x3FF,0x3FF,0xFFF);
 		_delay_ms(delay);
-		SetLed(0,0,255,0);
+		SetLed12(0,0x3FF,0xFFF,0x3FF);
 		_delay_ms(delay);
 		
 		if(timeout==0)
@@ -211,6 +211,52 @@ void ani_sectors()
 			timeout=4;
 		}
 		if(delay==1024)
+		{
+			break;
+		}
+	}
+}
+
+void ani_sectors12()
+{
+	uint16_t delay=1;
+	uint8_t i = 0;
+	
+	timeout = 4;
+	while(1)
+	{	
+		
+		SetLed12(0,0xFFF,0,0);
+		for(i=0;i<delay;i++){_delay_ms(50);}
+		SetLed12(0,0xBFF,0x3FF,0);
+		for(i=0;i<delay;i++){_delay_ms(50);}
+		SetLed12(0,0x7FF,0x7FF,0);
+		for(i=0;i<delay;i++){_delay_ms(50);}
+		SetLed12(0,0x3FF,0xBFF,0);
+		for(i=0;i<delay;i++){_delay_ms(50);}
+		SetLed12(0,0,0xFFF,0);
+		for(i=0;i<delay;i++){_delay_ms(50);}
+		SetLed12(0,0,0xBFF,0x3FF);
+		for(i=0;i<delay;i++){_delay_ms(50);}
+		SetLed12(0,0,0x7FF,0x7FF);
+		for(i=0;i<delay;i++){_delay_ms(50);}
+		SetLed12(0,0,0x3FF,0xBFF);
+		for(i=0;i<delay;i++){_delay_ms(50);}
+		SetLed12(0,0,0,0xFFF);
+		for(i=0;i<delay;i++){_delay_ms(50);}
+		SetLed12(0,0x3ff,0,0xBFF);
+		for(i=0;i<delay;i++){_delay_ms(50);}
+		SetLed12(0,0x7ff,0,0x7FF);
+		for(i=0;i<delay;i++){_delay_ms(50);}
+		SetLed12(0,0xBff,0,0x3FF);
+		for(i=0;i<delay;i++){_delay_ms(50);}
+		
+		if(timeout==0)
+		{
+			delay*=2;
+			timeout=4;
+		}
+		if(delay==128)
 		{
 			break;
 		}
