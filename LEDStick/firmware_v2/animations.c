@@ -164,7 +164,6 @@ void ani_rainbow()
 
 void ani_battery()
 {
-	timeout = 10;
 // 0-160
 		uint16_t adc_tmp = adc_value;
 	
@@ -179,12 +178,27 @@ void ani_battery()
 		adc_tmp = adc_tmp-850;
 
 
+	timeout = 10;
 	while(1)
 	{	
 		SetLed(0,0,255,0);
 		_delay_ms(adc_tmp);
 		SetLed(0,255,0,0);
 		_delay_ms((160-adc_tmp));
+		if(timeout==0)
+		{
+			break;
+		}
+	}
+	
+	timeout = 3;
+	uint8_t i=0;
+	while(1)
+	{	
+		SetLed(0,0,255,0);
+		for(i=0;i<adc_tmp;i++) _delay_ms(10);
+		SetLed(0,255,0,0);
+		for(i=0;i<(160-adc_tmp);i++) _delay_ms(10);
 		if(timeout==0)
 		{
 			break;
