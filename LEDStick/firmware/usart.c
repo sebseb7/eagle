@@ -4,18 +4,28 @@
 #include "main.h"
 #include "usart.h"
 
-#define UART_RXBUFSIZE 512
+#define UART_RXBUFSIZE 32
 
 volatile static uint8_t rxbuf0[UART_RXBUFSIZE];
 volatile static uint8_t *volatile rxhead0, *volatile rxtail0;
-volatile uint8_t xon = 0;
 
+volatile uint8_t appStart = 0;
 
 ISR (USART_RX_vect)
 {
         int diff;
         uint8_t c;
         c=UDR0;
+
+        if(c == 0x1b)
+        {
+        	appStart = 1;
+		}
+        if(c == 0x53)
+        {
+        	appStart = 1;
+		}
+
         diff = rxhead0 - rxtail0;
         if (diff < 0) diff += UART_RXBUFSIZE;
         if (diff < UART_RXBUFSIZE -1)
@@ -23,12 +33,8 @@ ISR (USART_RX_vect)
             *rxhead0 = c;
             ++rxhead0;
             if (rxhead0 == (rxbuf0 + UART_RXBUFSIZE)) rxhead0 = rxbuf0;
-            if((diff > 100)&&(xon==0))
-			{
-				xon=1;
-				//set the CTS pin
-			}
         }
+        
 }
 
 
@@ -61,9 +67,9 @@ void USART0_Init (void)
 
 
 
-	UCSR0B |= (1 << RXEN0);
-	UCSR0B &= ~(1 << TXEN0);
-//	UCSR0B |= (1 << RXEN0) | (1 << TXEN0);
+//	UCSR0B |= (1 << RXEN0);
+//	UCSR0B &= ~(1 << TXEN0);
+	UCSR0B |= (1 << RXEN0) | (1 << TXEN0);
 	UCSR0B |= (1 << RXCIE0);
 
 	rxhead0 = rxtail0 = rxbuf0;
@@ -84,13 +90,6 @@ uint8_t USART0_Getc_nb(uint8_t *c)
     if (rxhead0==rxtail0) return 0;
     *c = *rxtail0;
     if (++rxtail0 == (rxbuf0 + UART_RXBUFSIZE)) rxtail0 = rxbuf0;
-
-    uint8_t diff = rxhead0 - rxtail0;
-	if((diff < 10)&&(xon==1))
-	{
-		xon=0;
-		//set the CTS pin
-	}
 
     return 1;
 }
