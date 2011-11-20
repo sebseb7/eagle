@@ -1,6 +1,6 @@
 # MCU name
-MCU = atmega88pa
-MCU_AVRDUDE = atmega88pa
+MCU = atmega88
+MCU_AVRDUDE = atmega88
 ## MCU = atmega644
 
 
@@ -14,6 +14,24 @@ BOOTSIZE=1024
 
 
 ifeq ($(MCU), atmega88pa)
+ifeq ($(BOOTSIZE), 128)
+	MT_BOOTLOADER_ADDRESS = 0x1F00
+	FUSE_SETTINGS = -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0xfe:m
+endif
+ifeq ($(BOOTSIZE), 256)
+	MT_BOOTLOADER_ADDRESS = 0x1E00
+	FUSE_SETTINGS = -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0xfc:m
+endif
+ifeq ($(BOOTSIZE), 512)
+	MT_BOOTLOADER_ADDRESS = 0x1C00
+	FUSE_SETTINGS = -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0xfa:m
+endif
+ifeq ($(BOOTSIZE), 1024)
+	MT_BOOTLOADER_ADDRESS = 0x1800
+	FUSE_SETTINGS = -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0xf8:m
+endif
+endif
+ifeq ($(MCU), atmega88)
 ifeq ($(BOOTSIZE), 128)
 	MT_BOOTLOADER_ADDRESS = 0x1F00
 	FUSE_SETTINGS = -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0xfe:m

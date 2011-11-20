@@ -21,7 +21,8 @@ typedef uint8_t pagebuf_t;
 
 #if defined(__AVR_ATmega88PA__)
 #include "mega88.h"
-
+#elif defined(__AVR_ATmega88__)
+#include "mega88.h"
 #else
 #error "no definition for MCU available in chipdef.h"
 #endif
