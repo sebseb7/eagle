@@ -1,5 +1,6 @@
 #include <inttypes.h>
 #include <avr/interrupt.h>
+#include <avr/wdt.h>
 
 #include "main.h"
 #include "timer.h"
@@ -18,14 +19,29 @@
 // SOUT == MISO/PB4
 // GSCLK == PB0
 
+ISR(PCINT2_vect)
+{
+	wdt_enable(WDTO_250MS);
+}
 
 int main (void)
 {
-
+	cli();
+	wdt_reset();
+	MCUSR &= ~(1<<WDRF);
+	WDTCSR |= (1<<WDCE) | (1<<WDE);
+	WDTCSR = 0x00;
+                                    
+                                    
 	SPI_init();
 	LED_init();
 	ADC_Init();
 	TIMER1_Init();
+	
+	PORTD |= (1<<PORTD3);
+	PCMSK2 |= (1<<PCINT19);
+	PCICR |= (1<<PCIE2);
+	
 
 	sei ();
 	
@@ -36,8 +52,8 @@ int main (void)
 	initialized = 1;
 
 	SetLed(0,0,10,0);
-	timeout = 2;
-	while(timeout);
+//	timeout = 2;
+//	while(timeout);
 
 
 
