@@ -1,0 +1,43 @@
+#!/usr/bin/perl
+
+use Device::SerialPort;
+use Time::HiRes qw(usleep);
+
+my $port = Device::SerialPort->new("/dev/cu.usbserial-A100DEF4");
+$port->databits(8);
+$port->baudrate(115200);
+$port->parity("none");
+$port->stopbits(1);
+
+
+my $pi =  ( 4 * atan2(1, 1));
+
+
+my $x = 0;
+my $y = 0;
+my $z = 0;
+while(1)
+{
+	my $b = int((sin($x)+1)*128);
+	my $g = int((sin($y+(2*$pi*2/3))+1)*128);
+	my $r = int((sin($z+(4*$pi*2/3))+1)*128);
+	my $return=$port->write(chr(0x23).esc(chr(2).chr($r).chr($g).chr($b).chr(0)));
+	usleep(30000);
+	$y+=0.05;
+	$z+=0.02;
+	$x+=0.03;
+}
+
+warn $port->read(1);
+
+
+sub esc($)
+{
+    my $data = shift;
+    
+    
+    $data =~ s/\x42/\x42\x2/go;
+	$data =~ s/\x23/\x42\x1/go;
+                                                            
+	return $data;
+}

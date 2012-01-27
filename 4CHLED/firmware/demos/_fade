@@ -1,0 +1,63 @@
+#!/usr/bin/perl
+
+use Device::SerialPort;
+use Time::HiRes qw(usleep);
+
+my $port = Device::SerialPort->new("/dev/cu.usbserial-A100DEF4");
+$port->databits(8);
+$port->baudrate(115200);
+$port->parity("none");
+$port->stopbits(1);
+
+my $r = 0;
+my $b = 0;
+my $g = 0;
+
+while(1)
+{
+
+	my $r1 = int((sin($r)+1)*127);
+	my $g1 = int((sin($g+(3.1415/3*1))+1)*127);
+	my $b1 = int((sin($b+(3.1415/3*2))+1)*127);
+
+
+	warn $r1;
+	setColor($r1,0,255-$r1,0);
+
+	usleep(4000);
+	$r+=0.1;
+	$b+=0.1;
+	$g+=0.1;
+
+}
+warn $port->read(1);
+
+sub setColor($$$$)
+{
+	my $r = shift;
+	my $g = shift;
+	my $b = shift;
+	my $w = shift;
+
+	my $return=$port->write(chr(0x23).esc(chr(2).chr($r).chr($g).chr($b).chr($w)));
+	usleep(1000);
+	my $return=$port->write(chr(0x23).esc(chr(3).chr($r).chr($g).chr($b).chr($w)));
+	usleep(1000);
+	my $return=$port->write(chr(0x23).esc(chr(4).chr($r).chr($g).chr($b).chr($w)));
+	usleep(1000);
+	my $return=$port->write(chr(0x23).esc(chr(5).chr($r).chr($g).chr($b).chr($w)));
+	usleep(1000);
+}
+
+
+
+sub esc($)
+{
+    my $data = shift;
+    
+    
+    $data =~ s/\x42/\x42\x2/go;
+	$data =~ s/\x23/\x42\x1/go;
+                                                            
+	return $data;
+}
