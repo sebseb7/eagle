@@ -28,7 +28,7 @@ HEADERS=$(wildcard *.h)
 
 
 #  Compiler Options
-GCFLAGS = -mmcu=$(MCU) -I. -gstabs -DF_CPU=20000000 -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wstrict-prototypes  -std=gnu99 -MD -MP
+GCFLAGS = -mmcu=$(MCU) -I. -gstabs -DF_CPU=20000000 -O2 -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wstrict-prototypes  -std=gnu99 -MD -MP
 #LDFLAGS =  -Wl,-Map=pwbl.map,--cref    -lm -Wl,--section-start=.text=0x1800
 LDFLAGS = -mmcu=$(MCU)  
 

@@ -105,14 +105,14 @@ int main(void)
 		if(USART0_Getc_nb(&data))
 		{
 
-			if(data == 0x23)
+			if(data == 0x42)
 			{
 				idx = 0;
 				escape = 0;
 				our_data = 0;
 				continue;
 				
-			} else if (data == 0x42)
+			} else if (data == 0x65)
 			{
 				escape = 1;
 				continue;
@@ -128,12 +128,23 @@ int main(void)
 				{
 					data = 0x42;
 				}
+				else if (data == 3)
+				{
+					data = 0x65;
+				}
+				else if (data == 4)
+				{
+					data = 0x66;
+				}
 				escape = 0;
 			}
 
 			if(idx == 0)
 			{
-				if(data == 0x02)//addr
+				if(data == 0xf0)//addr
+				{
+					our_data = 1;
+				} else if(data == 0xff)//bcast
 				{
 					our_data = 1;
 				}
