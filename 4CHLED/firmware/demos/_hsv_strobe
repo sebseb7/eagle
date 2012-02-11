@@ -1,0 +1,33 @@
+#!/usr/bin/perl
+
+use strict;
+use ceilingLight;
+use Time::HiRes qw(usleep);
+
+
+ceilingLight::init();
+
+
+my $h = 0;
+
+
+while(1)
+{
+	$h+=50;
+
+	$h-= 360 if $h >= 360;
+
+	(my $r2,my $g2,my $b2) = ceilingLight::hsv2rgb($h,1,1);
+	
+	my $r1 = int($r2*255);
+	my $g1 = int($g2*255);
+	my $b1 = int($b2*255);
+
+	ceilingLight::setColor(0,$r1,$g1,$b1,0);
+	usleep(20000);
+#	ceilingLight::setColor(0,0,0,0,0);
+	usleep(80000);
+
+}
+warn ceilingLight::read();
+
