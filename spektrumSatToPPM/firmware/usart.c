@@ -21,6 +21,10 @@ uint8_t uart_getc_nb(uint8_t *c)
 
 ISR (USART_RX_vect)
 {
+	UCSR0B &= ~(1<<RXCIE0);
+	asm volatile("sei");
+	
+	
 	int diff;
 	uint8_t c;
 	c=UDR;
@@ -32,6 +36,8 @@ ISR (USART_RX_vect)
 		++rxhead;
 		if (rxhead == (rxbuf + UART_RXBUFSIZE)) rxhead = rxbuf;
 	};
+
+	UCSR0B |= (1<<RXCIE0);
 }
 
 //*****************************************************************************

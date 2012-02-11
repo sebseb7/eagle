@@ -15,7 +15,7 @@ endif
 ifneq ($(findstring Darwin,$(OSTYPE)),)
 USB_DEVICE = /dev/cu.SLAB_USBtoUART
 else
-USB_DEVICE = /dev/ttyUSB1
+USB_DEVICE = /dev/ttyUSB0
 endif
 
 

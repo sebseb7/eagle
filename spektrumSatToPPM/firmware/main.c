@@ -103,12 +103,15 @@ int main(void)
 	uint8_t old_data = 0;
 	uint8_t state = 0;
 	int16_t channels[PPMCH];
+	int16_t channels_tmp[PPMCH];
+	int16_t channels_old[PPMCH];
 	uint8_t i = 0;
 
 
 	for(i=0;i<PPMCH;i++)
 	{
 		channels[i] = 0;
+		channels_old[i] = 0;
 	}
 	
 					
@@ -120,6 +123,7 @@ int main(void)
 			timeout = 60; // 6ms
 		}
 			
+		uint8_t good = 1;
 		if(uart_getc_nb(&data))
 		{
 			timeout = 60; //6ms
@@ -134,6 +138,18 @@ int main(void)
 				if((old_data >> 2) == 1)
 				{
 					channels[0] = data+((old_data&3)*0xff);
+					if(channels[0] > 900)
+					{
+						good = 0;
+					}
+					if(channels[0] < 100)
+					{
+						good = 0;
+					}
+				}
+				else
+				{
+					good = 0;
 				}
 			}
 			if(state == 4)
@@ -142,6 +158,10 @@ int main(void)
 				{
 					channels[1] = data+((old_data&3)*0xff);
 				}
+				else
+				{
+					good = 0;
+				}
 			}
 			if(state == 6)
 			{
@@ -149,6 +169,18 @@ int main(void)
 				{
 					channels[2] = data+((old_data&3)*0xff);
 				}
+				else
+				{
+					good = 0;
+				}
+					if(channels[2] > 900)
+					{
+						good = 0;
+					}
+					if(channels[2] < 100)
+					{
+						good = 0;
+					}
 			}
 			if(state == 8)
 			{
@@ -156,6 +188,18 @@ int main(void)
 				{
 					channels[3] = data+((old_data&3)*0xff);
 				}
+				else
+				{
+					good = 0;
+				}
+					if(channels[3] > 900)
+					{
+						good = 0;
+					}
+					if(channels[3] < 100)
+					{
+						good = 0;
+					}
 			}
 			if(state == 10)
 			{
@@ -165,30 +209,66 @@ int main(void)
 				}
 				else
 				{
-					PORTB ^= (1 << PORTB1);
+					good = 0;
 				}
+					if(channels[4] > 900)
+					{
+						good = 0;
+					}
+					if(channels[4] < 100)
+					{
+						good = 0;
+					}
 			}
 			if(state == 12)
 			{
-				if((old_data >> 2) == 5)
-				channels[5] = data+((old_data&3)*0xff);
+				if((old_data >> 2) == 4)
+				{
+					channels[5] = data+((old_data&3)*0xff);
+				}
+				else
+				{
+					good = 0;
+				}
 
-
-
-
-				cli();
-				uint8_t i=0;
 				for(i=0;i<PPMCH;i++)
 				{
-					// - 16 == -6
-					// - 36 == -10 
-					uint16_t pw = (1000 + (channels[i]*1.25)) - 116;
-					isr_channel_pw[i] = ((((F_CPU/1000) * pw)/1000)/TIMER1_PRESCALER);
+//					if(channels_old[i] != channels[i])
+//						good = 0;
 				}
-				sei();
 
 
-				timeout2 = 20000; // 2s
+
+				if(good == 0)
+				{
+				}
+				else
+				{
+					PORTB ^= (1 << PORTB1);
+					for(i=0;i<PPMCH;i++)
+					{
+						// - 16 == -6
+						// - 36 == -10 
+						uint16_t pw = (1000 + (channels[i]*1.25)) - 116;
+						channels_tmp[i] = ((((F_CPU/1000) * pw)/1000)/TIMER1_PRESCALER);
+					}
+					cli();
+					for(i=0;i<PPMCH;i++)
+					{
+						// - 16 == -6
+						// - 36 == -10 
+						isr_channel_pw[i] = channels_tmp[i];
+					}
+					sei();
+					timeout2 = 20000; // 2s
+				}
+
+				for(i=0;i<PPMCH;i++)
+				{
+					channels_old[i] = channels[i];
+				}
+
+
 			}
 
 			if(state < 20)
