@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+
+use strict;
+use ceilingLight;
+use Time::HiRes qw(usleep);
+
+
+ceilingLight::init();
+
+ceilingLight::setColor(0,0,0,200,0);
+warn ceilingLight::read();
+

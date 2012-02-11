@@ -1,0 +1,42 @@
+#!/usr/bin/perl
+
+use strict;
+use ceilingLight;
+use Time::HiRes qw(usleep);
+
+
+ceilingLight::init();
+
+
+my $s1 = 0;
+my $s2 = 0;
+my $s3 = 0;
+my $s4 = 0;
+
+
+while(1)
+{
+	$s1+=0.04;
+	$s2+=0.05;
+	$s3+=0.06;
+	$s4+=0.07;
+
+	my $h1  =((sin($s1/3)*sin($s1/2.2))+1)*180; 
+	my $h2  =((sin($s2/3)*sin($s2/2.5))+1)*180; 
+	my $h3  =((sin($s3/3)*sin($s3/2.7))+1)*180; 
+	my $h4  =((sin($s4/3)*sin($s4/2.9))+1)*180; 
+	(my $r1,my $g1,my $b1) = ceilingLight::hsv2rgb($h1,1,1);
+	(my $r2,my $g2,my $b2) = ceilingLight::hsv2rgb($h2,1,1);
+	(my $r3,my $g3,my $b3) = ceilingLight::hsv2rgb($h3,1,1);
+	(my $r4,my $g4,my $b4) = ceilingLight::hsv2rgb($h4,1,1);
+	
+	ceilingLight::setColor(1,0,0,int($b1*255),0);
+	ceilingLight::setColor(2,0,int($g2*255),0,0);
+	ceilingLight::setColor(3,int($r3*255),0,0,0);
+	ceilingLight::setColor(4,0,0,0,0);	
+
+	usleep(4001);
+
+}
+warn ceilingLight::read();
+
