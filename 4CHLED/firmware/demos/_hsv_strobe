@@ -25,7 +25,7 @@ while(1)
 
 	ceilingLight::setColor(0,$r1,$g1,$b1,0);
 	usleep(20000);
-	ceilingLight::setColor(0,0,0,0,0);
+#	ceilingLight::setColor(0,0,0,0,0);
 	usleep(80000);
 
 }

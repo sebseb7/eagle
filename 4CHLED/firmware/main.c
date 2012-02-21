@@ -165,6 +165,7 @@ int main(void)
 				} else if (idx == 4)
 				{
 					led_a2 = data;//white
+					our_data = 0;
 				}
 				
 			}

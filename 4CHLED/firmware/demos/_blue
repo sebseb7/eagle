@@ -7,6 +7,6 @@ use Time::HiRes qw(usleep);
 
 ceilingLight::init();
 
-ceilingLight::setColor(0,0,0,200,0);
+ceilingLight::setColor(0,0,0,250,0);
 warn ceilingLight::read();
 
