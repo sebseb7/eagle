@@ -1,5 +1,6 @@
+// bind todo: 
 // satellit sendet 15ms nach poweron up flanke
-// basis antwortet nach weiteren 60ms mit 4 low-pulsen (8 flankenwechsel) a 126us
+// basis antwortet nach weiteren 60ms mit 4 low-pulsen (8 flankenwechsel) a 126usi anbstand
 //
 //
 #include <inttypes.h>
@@ -128,7 +129,6 @@ int main(void)
 			timeout = 60; // 6ms
 		}
 			
-		uint8_t good = 1;
 		if(uart_getc_nb(&data))
 		{
 			timeout = 60; //6ms
@@ -138,143 +138,40 @@ int main(void)
 				state=0;
 			}
 
-			if(state == 2)
-			{	
-				if((old_data >> 2) == 1)
-				{
-					channels[0] = data+((old_data&3)*0xff);
-					if(channels[0] > 900)
-					{
-						good = 0;
-					}
-					if(channels[0] < 100)
-					{
-						good = 0;
-					}
-				}
-				else
-				{
-					good = 0;
-				}
-			}
-			if(state == 4)
+			for(i = 2; i < 14;i+=2)
 			{
-				if((old_data >> 2) == 5)
+				if(state == i)
 				{
-					channels[1] = data+((old_data&3)*0xff);
-				}
-				else
-				{
-					good = 0;
-				}
-			}
-			if(state == 6)
-			{
-				if((old_data >> 2) == 2)
-				{
-					channels[2] = data+((old_data&3)*0xff);
-				}
-				else
-				{
-					good = 0;
-				}
-					if(channels[2] > 900)
-					{
-						good = 0;
-					}
-					if(channels[2] < 100)
-					{
-						good = 0;
-					}
-			}
-			if(state == 8)
-			{
-				if((old_data >> 2) == 3)
-				{
-					channels[3] = data+((old_data&3)*0xff);
-				}
-				else
-				{
-					good = 0;
-				}
-					if(channels[3] > 900)
-					{
-						good = 0;
-					}
-					if(channels[3] < 100)
-					{
-						good = 0;
-					}
-			}
-			if(state == 10)
-			{
-				if((old_data >> 2) == 0)
-				{
-					channels[4] = data+((old_data&3)*0xff);
-				}
-				else
-				{
-					good = 0;
-				}
-					if(channels[4] > 900)
-					{
-						good = 0;
-					}
-					if(channels[4] < 100)
-					{
-						good = 0;
-					}
-			}
-			if(state == 12)
-			{
-				if((old_data >> 2) == 4)
-				{
-					channels[5] = data+((old_data&3)*0xff);
-				}
-				else
-				{
-					good = 0;
+					channels[(i/2)-1] = data+((old_data&3)*0xff);
 				}
 
-				for(i=0;i<PPMCH;i++)
-				{
-//					if(channels_old[i] != channels[i])
-//						good = 0;
-				}
-
-
-
-				if(good == 0)
-				{
-				}
-				else
+				if(state == 12)
 				{
 					PORTB ^= (1 << PORTB1);
 					for(i=0;i<PPMCH;i++)
 					{
-						// - 16 == -6
-						// - 36 == -10 
 						uint16_t pw = (1000 + (channels[i]*1.25)) - 116;
 						channels_tmp[i] = ((((F_CPU/1000) * pw)/1000)/TIMER1_PRESCALER);
 					}
 					cli();
 					for(i=0;i<PPMCH;i++)
 					{
-						// - 16 == -6
-						// - 36 == -10 
 						isr_channel_pw[i] = channels_tmp[i];
 					}
 					sei();
 					timeout2 = 20000; // 2s
-				}
 
-				for(i=0;i<PPMCH;i++)
-				{
-					channels_old[i] = channels[i];
+					for(i=0;i<PPMCH;i++)
+					{
+						channels_old[i] = channels[i];
+					}
+
+
 				}
 
 
 			}
+
 
 			if(state < 20)
 				state++;
