@@ -1,3 +1,7 @@
+// satellit sendet 15ms nach poweron up flanke
+// basis antwortet nach weiteren 60ms mit 4 low-pulsen (8 flankenwechsel) a 126us
+//
+//
 #include <inttypes.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -24,6 +28,7 @@ volatile uint16_t timeout2 = 1000;
 #define RC_RESET_PW_TIMER_VAL           ((((F_CPU/1000) * 7500)/1000)/TIMER1_PRESCALER) 
 #define RC_PPM_SYNC_PW_VAL              ((((F_CPU/1000) * 300)/1000)/TIMER1_PRESCALER)
 
+void bind(void);
 
 ISR(TIMER1_COMPB_vect)
 {
@@ -94,7 +99,7 @@ int main(void)
 	DDRB |= (1<<PORTB2); //ppm out
 
 
-
+//	bind();
 
 	USART_Init();
 	sei();
@@ -277,5 +282,51 @@ int main(void)
 
 		}
 	}
+}
+
+
+void bind()
+{
+	UCSR0B &= ~(1 << RXCIE0); 
+    UCSR0B &= ~(1 << RXEN0);  
+	PORTD &= ~(1 << PORTD0); _delay_us(116);
+
+	DDRD |= (1<<PORTD2);
+	DDRD |= (1<<PORTD3);
+
+
+	uint8_t i = 0;
+
+	_delay_ms(290);
+
+	PORTD |= (1<<PORTD2);
+	PORTD |= (1<<PORTD3);
+
+	while(1) // Wait 10 seconds for spektrum sat connection
+	{
+		if(PIND & (1 << PORTD0))
+	    {
+	        break;
+	    }
+	}
+	PORTB ^= (1 << PORTB1);
+	
+	DDRD |= (1 << DDD0);
+	_delay_ms(290);
+	PORTD &= ~(1 << PORTD0); _delay_us(116);
+	PORTD |= (1 << PORTD0);  _delay_us(116);
+	PORTD &= ~(1 << PORTD0); _delay_us(116);
+	PORTD |= (1 << PORTD0);  _delay_us(116);
+	PORTD &= ~(1 << PORTD0); _delay_us(116);
+//	PORTD |= (1 << PORTD0);  _delay_us(116);
+
+	_delay_ms(200);
+	PORTB ^= (1 << PORTB1);
+	_delay_ms(200);
+	PORTB ^= (1 << PORTB1);
+	_delay_ms(200);
+
+	DDRD &= ~(1 << DDD0); // Rx as input
+	PORTD &= ~(1 << PORTD0);
 }
 

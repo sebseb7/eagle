@@ -16,8 +16,8 @@ my $s4 = 0;
 
 while(1)
 {
-	$s1+=0.04;
-	$s2+=0.05;
+	$s1+=0.09;
+	$s2+=0.10;
 	$s3+=0.06;
 	$s4+=0.07;
 
@@ -33,9 +33,9 @@ while(1)
 	ceilingLight::setColor(1,0,0,int($b1*255),0);
 	ceilingLight::setColor(2,0,int($g2*255),0,0);
 	ceilingLight::setColor(3,int($r3*255),0,0,0);
-	ceilingLight::setColor(4,0,0,0,0);	
+	ceilingLight::setColor(4,int($r3*255),0,0,0);	
 
-	usleep(4001);
+	usleep(1001);
 
 }
 warn ceilingLight::read();

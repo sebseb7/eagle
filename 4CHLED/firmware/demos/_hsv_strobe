@@ -13,7 +13,7 @@ my $h = 0;
 
 while(1)
 {
-	$h+=50;
+	$h+=0.2;
 
 	$h-= 360 if $h >= 360;
 
@@ -24,9 +24,9 @@ while(1)
 	my $b1 = int($b2*255);
 
 	ceilingLight::setColor(0,$r1,$g1,$b1,0);
-	usleep(20000);
+	usleep(2000);
 #	ceilingLight::setColor(0,0,0,0,0);
-	usleep(80000);
+#	usleep(80000);
 
 }
 warn ceilingLight::read();
