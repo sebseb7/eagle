@@ -94,9 +94,9 @@ void SetLed12(uint8_t led,uint16_t red,uint16_t green, uint16_t blue)
 	PORTD &= ~(1<<PORTD5); // mode = GS
 	if((led==1)||(led==0))
 	{
-		l1r=red;
-		l1g=green;
-		l1b=blue;
+//		l1r=red;
+//		l1g=green;
+//		l1b=blue;
 	}
 	if((led==2)||(led==0))
 	{
