@@ -2,6 +2,8 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 
+
+
 #include "main.h"
 #include "timer.h"
 #include "adc.h"
@@ -101,8 +103,6 @@ int main (void)
 		SetLed(4,10,0,0);
 		SetLed(5,0,10,0);
 	}
-	
-	
 	
 
 	while(1)
