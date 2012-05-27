@@ -107,7 +107,6 @@ int main (void)
 
 	while(1)
 	{
-		ani_c3d2();	
 		ani_battery();	
 		ani_rainbow();	
 		ani_sectors3();
@@ -115,6 +114,7 @@ int main (void)
 		ani_greenyellow();	
 		ani_redblue();	
 		ani_sectors12();
+		ani_c3d2();	
 	}// while(1)
 	
 }	
