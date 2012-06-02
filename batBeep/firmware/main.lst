@@ -1,0 +1,358 @@
+   1               		.file	"main.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   9               		.text
+  10               	.Ltext0:
+  76               	.global	__vector_16
+  78               	__vector_16:
+   1:main.c        **** #include <inttypes.h>
+   2:main.c        **** #include <avr/io.h>
+   3:main.c        **** #include <avr/interrupt.h>
+   4:main.c        **** #include <util/delay.h>
+   5:main.c        **** #include <stdlib.h>
+   6:main.c        **** 
+   7:main.c        **** #include "main.h"
+   8:main.c        **** 
+   9:main.c        **** 
+  10:main.c        **** uint8_t adc_timeout = 0;
+  11:main.c        **** volatile uint8_t do_adc_sleep = 0;
+  12:main.c        **** 
+  13:main.c        **** //30hz
+  14:main.c        **** ISR (TIMER0_OVF_vect)
+  15:main.c        **** {
+  80               	.LM0:
+  81               	.LFBB1:
+  82 0000 1F92      		push __zero_reg__
+  83 0002 0F92      		push r0
+  84 0004 0FB6      		in r0,__SREG__
+  85 0006 0F92      		push r0
+  86 0008 1124      		clr __zero_reg__
+  87 000a 8F93      		push r24
+  88               	/* prologue: Signal */
+  89               	/* frame size = 0 */
+  16:main.c        **** 	adc_timeout++;
+  91               	.LM1:
+  92 000c 8091 0000 		lds r24,adc_timeout
+  93 0010 8F5F      		subi r24,lo8(-(1))
+  94 0012 8093 0000 		sts adc_timeout,r24
+  17:main.c        **** 	
+  18:main.c        **** 	// 2Hz == ~ every 0.5 seconds
+  19:main.c        **** 	if(adc_timeout == 15)
+  96               	.LM2:
+  97 0016 8F30      		cpi r24,lo8(15)
+  98 0018 01F4      		brne .L3
+  20:main.c        **** 	{
+  21:main.c        **** 		adc_timeout=0;
+ 100               	.LM3:
+ 101 001a 1092 0000 		sts adc_timeout,__zero_reg__
+  22:main.c        **** 		do_adc_sleep=1;
+ 103               	.LM4:
+ 104 001e 81E0      		ldi r24,lo8(1)
+ 105 0020 8093 0000 		sts do_adc_sleep,r24
+ 106               	.L3:
+ 107               	/* epilogue start */
+  23:main.c        **** 	}
+  24:main.c        **** }
+ 109               	.LM5:
+ 110 0024 8F91      		pop r24
+ 111 0026 0F90      		pop r0
+ 112 0028 0FBE      		out __SREG__,r0
+ 113 002a 0F90      		pop r0
+ 114 002c 1F90      		pop __zero_reg__
+ 115 002e 1895      		reti
+ 117               	.Lscope1:
+ 119               	.global	__vector_21
+ 121               	__vector_21:
+  25:main.c        **** 
+  26:main.c        **** ISR(ADC_vect)
+  27:main.c        **** {
+ 123               	.LM6:
+ 124               	.LFBB2:
+ 125 0030 1F92      		push __zero_reg__
+ 126 0032 0F92      		push r0
+ 127 0034 0FB6      		in r0,__SREG__
+ 128 0036 0F92      		push r0
+ 129 0038 1124      		clr __zero_reg__
+ 130 003a 2F93      		push r18
+ 131 003c 8F93      		push r24
+ 132 003e 9F93      		push r25
+ 133               	/* prologue: Signal */
+ 134               	/* frame size = 0 */
+  28:main.c        **** 	current_adc_value = ADC;
+ 136               	.LM7:
+ 137 0040 8091 7800 		lds r24,120
+ 138 0044 9091 7900 		lds r25,(120)+1
+ 139 0048 9093 0000 		sts (current_adc_value)+1,r25
+ 140 004c 8093 0000 		sts current_adc_value,r24
+  29:main.c        **** 	
+  30:main.c        **** 	
+  31:main.c        **** 	if( current_adc_value < 610)
+ 142               	.LM8:
+ 143 0050 8091 0000 		lds r24,current_adc_value
+ 144 0054 9091 0000 		lds r25,(current_adc_value)+1
+ 145 0058 8256      		subi r24,lo8(610)
+ 146 005a 9240      		sbci r25,hi8(610)
+ 147 005c 00F4      		brsh .L5
+  32:main.c        **** 	{
+  33:main.c        **** 		PORTD &= ~(1<<PORTD7);
+ 149               	.LM9:
+ 150 005e 5F98      		cbi 43-32,7
+ 151 0060 00C0      		rjmp .L6
+ 152               	.L5:
+  34:main.c        **** 	}
+  35:main.c        **** 	else
+  36:main.c        **** 	{
+  37:main.c        **** 		PORTD |= (1<<PORTD7);
+ 154               	.LM10:
+ 155 0062 5F9A      		sbi 43-32,7
+ 156               	.L6:
+  38:main.c        **** 	}
+  39:main.c        **** 
+  40:main.c        **** 
+  41:main.c        **** 	if( current_adc_value < 620)
+ 158               	.LM11:
+ 159 0064 8091 0000 		lds r24,current_adc_value
+ 160 0068 9091 0000 		lds r25,(current_adc_value)+1
+ 161 006c 8C56      		subi r24,lo8(620)
+ 162 006e 9240      		sbci r25,hi8(620)
+ 163 0070 00F4      		brsh .L7
+  42:main.c        **** 	{
+  43:main.c        **** 		PORTC |= (1<<PORTC1);
+ 165               	.LM12:
+ 166 0072 419A      		sbi 40-32,1
+  44:main.c        **** 		PORTC |= (1<<PORTC2);
+ 168               	.LM13:
+ 169 0074 429A      		sbi 40-32,2
+  45:main.c        **** 		PORTC |= (1<<PORTC3);
+ 171               	.LM14:
+ 172 0076 439A      		sbi 40-32,3
+  46:main.c        **** 		PORTC &= ~(1<<PORTC4);
+ 174               	.LM15:
+ 175 0078 4498      		cbi 40-32,4
+ 176 007a 00C0      		rjmp .L11
+ 177               	.L7:
+  47:main.c        **** 	}
+  48:main.c        **** 	else if(current_adc_value < 662)
+ 179               	.LM16:
+ 180 007c 8091 0000 		lds r24,current_adc_value
+ 181 0080 9091 0000 		lds r25,(current_adc_value)+1
+ 182 0084 8659      		subi r24,lo8(662)
+ 183 0086 9240      		sbci r25,hi8(662)
+ 184 0088 00F4      		brsh .L9
+  49:main.c        **** 	{
+  50:main.c        **** 		PORTC |= (1<<PORTC1);
+ 186               	.LM17:
+ 187 008a 419A      		sbi 40-32,1
+  51:main.c        **** 		PORTC |= (1<<PORTC2);
+ 189               	.LM18:
+ 190 008c 429A      		sbi 40-32,2
+ 191 008e 00C0      		rjmp .L12
+ 192               	.L9:
+  52:main.c        **** 		PORTC &= ~(1<<PORTC3);
+  53:main.c        **** 		PORTC |= (1<<PORTC4);
+  54:main.c        **** 	}
+  55:main.c        **** 	else if(current_adc_value < 705)
+ 194               	.LM19:
+ 195 0090 8091 0000 		lds r24,current_adc_value
+ 196 0094 9091 0000 		lds r25,(current_adc_value)+1
+ 197 0098 815C      		subi r24,lo8(705)
+ 198 009a 9240      		sbci r25,hi8(705)
+ 199 009c 00F4      		brsh .L10
+  56:main.c        **** 	{
+  57:main.c        **** 		PORTC |= (1<<PORTC1);
+ 201               	.LM20:
+ 202 009e 419A      		sbi 40-32,1
+ 203 00a0 00C0      		rjmp .L13
+ 204               	.L10:
+  58:main.c        **** 		PORTC &= ~(1<<PORTC2);
+  59:main.c        **** 		PORTC &= ~(1<<PORTC3);
+  60:main.c        **** 		PORTC |= (1<<PORTC4);
+  61:main.c        **** 	}
+  62:main.c        **** 	else 
+  63:main.c        **** 	{
+  64:main.c        **** 		PORTC &= ~(1<<PORTC1);
+ 206               	.LM21:
+ 207 00a2 4198      		cbi 40-32,1
+ 208               	.L13:
+  65:main.c        **** 		PORTC &= ~(1<<PORTC2);
+ 210               	.LM22:
+ 211 00a4 4298      		cbi 40-32,2
+ 212               	.L12:
+  66:main.c        **** 		PORTC &= ~(1<<PORTC3);
+ 214               	.LM23:
+ 215 00a6 4398      		cbi 40-32,3
+  67:main.c        **** 		PORTC |= (1<<PORTC4);
+ 217               	.LM24:
+ 218 00a8 449A      		sbi 40-32,4
+ 219               	.L11:
+ 220               	/* epilogue start */
+  68:main.c        **** 	}
+  69:main.c        **** 
+  70:main.c        **** }
+ 222               	.LM25:
+ 223 00aa 9F91      		pop r25
+ 224 00ac 8F91      		pop r24
+ 225 00ae 2F91      		pop r18
+ 226 00b0 0F90      		pop r0
+ 227 00b2 0FBE      		out __SREG__,r0
+ 228 00b4 0F90      		pop r0
+ 229 00b6 1F90      		pop __zero_reg__
+ 230 00b8 1895      		reti
+ 232               	.Lscope2:
+ 234               	.global	main
+ 236               	main:
+  71:main.c        **** 
+  72:main.c        **** 
+  73:main.c        **** 
+  74:main.c        **** int main (void)
+  75:main.c        **** {
+ 238               	.LM26:
+ 239               	.LFBB3:
+ 240               	/* prologue: function */
+ 241               	/* frame size = 0 */
+  76:main.c        **** 
+  77:main.c        **** 	PORTC |= (1<<PORTC1)|(1<<PORTC2)|(1<<PORTC3)|(1<<PORTC4)|(1<<PORTC5);
+ 243               	.LM27:
+ 244 00ba 88B1      		in r24,40-32
+ 245 00bc 8E63      		ori r24,lo8(62)
+ 246 00be 88B9      		out 40-32,r24
+  78:main.c        **** 	PORTB |= (1<<PORTB0)|(1<<PORTB1)|(1<<PORTB2)|(1<<PORTB3)|(1<<PORTB4)|(1<<PORTB5)|(1<<PORTB6)|(1<<P
+ 248               	.LM28:
+ 249 00c0 85B1      		in r24,37-32
+ 250 00c2 8FEF      		ldi r24,lo8(-1)
+ 251 00c4 85B9      		out 37-32,r24
+  79:main.c        **** 	PORTD |= (1<<PORTD0)|(1<<PORTD1)|(1<<PORTD2)|(1<<PORTD3)|(1<<PORTD4)|(1<<PORTD5)|(1<<PORTD6)|(1<<P
+ 253               	.LM29:
+ 254 00c6 9BB1      		in r25,43-32
+ 255 00c8 8BB9      		out 43-32,r24
+  80:main.c        **** 	
+  81:main.c        **** 	DDRC  |= (1<<PORTC1)|(1<<PORTC2)|(1<<PORTC3)|(1<<PORTC4);
+ 257               	.LM30:
+ 258 00ca 87B1      		in r24,39-32
+ 259 00cc 8E61      		ori r24,lo8(30)
+ 260 00ce 87B9      		out 39-32,r24
+  82:main.c        **** 	DDRD |= (1<<PORTD7);
+ 262               	.LM31:
+ 263 00d0 579A      		sbi 42-32,7
+  83:main.c        **** 
+  84:main.c        **** 	//reduce power
+  85:main.c        **** 	PRR |= (1<<PRTWI)|(1<<PRTIM1)|(1<<PRTIM2)|(1<<PRSPI)|(1<<PRUSART0);// add one of the timers !
+ 265               	.LM32:
+ 266 00d2 8091 6400 		lds r24,100
+ 267 00d6 8E6C      		ori r24,lo8(-50)
+ 268 00d8 8093 6400 		sts 100,r24
+  86:main.c        **** 
+  87:main.c        **** 
+  88:main.c        **** 	//set timer0 to normal Mode & prescaler 1024 == 30Hz
+  89:main.c        **** 	TCCR0B |= (1<<CS02)|(1<<CS00);
+ 270               	.LM33:
+ 271 00dc 85B5      		in r24,69-32
+ 272 00de 8560      		ori r24,lo8(5)
+ 273 00e0 85BD      		out 69-32,r24
+  90:main.c        **** 	//enable interrupt
+  91:main.c        **** 	TIMSK0 |= (1<<TOIE0);
+ 275               	.LM34:
+ 276 00e2 8091 6E00 		lds r24,110
+ 277 00e6 8160      		ori r24,lo8(1)
+ 278 00e8 8093 6E00 		sts 110,r24
+  92:main.c        **** 
+  93:main.c        **** 	// select adc0 and interval 1.1v reference
+  94:main.c        **** 	// adc0 pin is connecgted to vcc with a 1/3 divider
+  95:main.c        **** 	ADMUX |= (1<<REFS1)|(1<<REFS0);
+ 280               	.LM35:
+ 281 00ec 8091 7C00 		lds r24,124
+ 282 00f0 806C      		ori r24,lo8(-64)
+ 283 00f2 8093 7C00 		sts 124,r24
+  96:main.c        **** 	ADCSRA |= (1<<ADEN)|(1<<ADIE)|(1<<ADPS2)|(1<<ADPS1);
+ 285               	.LM36:
+ 286 00f6 8091 7A00 		lds r24,122
+ 287 00fa 8E68      		ori r24,lo8(-114)
+ 288 00fc 8093 7A00 		sts 122,r24
+  97:main.c        **** 	
+  98:main.c        **** 
+  99:main.c        **** 	SMCR |= (1<<SE);
+ 290               	.LM37:
+ 291 0100 83B7      		in r24,83-32
+ 292 0102 8160      		ori r24,lo8(1)
+ 293 0104 83BF      		out 83-32,r24
+ 100:main.c        **** 
+ 101:main.c        **** 	sei();
+ 295               	.LM38:
+ 296               	/* #APP */
+ 297               	 ;  101 "main.c" 1
+ 298 0106 7894      		sei
+ 299               	 ;  0 "" 2
+ 300               	/* #NOAPP */
+ 301               	.L17:
+ 102:main.c        **** 
+ 103:main.c        **** 	while(1)
+ 104:main.c        **** 	{
+ 105:main.c        **** 		if(do_adc_sleep == 1)
+ 303               	.LM39:
+ 304 0108 8091 0000 		lds r24,do_adc_sleep
+ 305 010c 8130      		cpi r24,lo8(1)
+ 306 010e 01F4      		brne .L15
+ 106:main.c        **** 		{
+ 107:main.c        **** 			do_adc_sleep=0;
+ 308               	.LM40:
+ 309 0110 1092 0000 		sts do_adc_sleep,__zero_reg__
+ 108:main.c        **** 			SMCR |= (1<<SM0);
+ 311               	.LM41:
+ 312 0114 83B7      		in r24,83-32
+ 313 0116 8260      		ori r24,lo8(2)
+ 314 0118 83BF      		out 83-32,r24
+ 315               	.L15:
+ 109:main.c        **** 			SMCR &= ~((1<<SM2)|(1<<SM0));
+ 110:main.c        **** 		}
+ 111:main.c        **** 		else
+ 112:main.c        **** 		{
+ 113:main.c        **** 			SMCR &= ~((1<<SM2)|(1<<SM0)|(1<<SM0));
+ 317               	.LM42:
+ 318 011a 83B7      		in r24,83-32
+ 319 011c 857F      		andi r24,lo8(-11)
+ 320 011e 83BF      		out 83-32,r24
+ 114:main.c        **** 		}
+ 115:main.c        **** 
+ 116:main.c        **** 		asm volatile("sleep");
+ 322               	.LM43:
+ 323               	/* #APP */
+ 324               	 ;  116 "main.c" 1
+ 325 0120 8895      		sleep
+ 326               	 ;  0 "" 2
+ 327               	/* #NOAPP */
+ 328 0122 00C0      		rjmp .L17
+ 330               	.Lscope3:
+ 331               	.global	adc_timeout
+ 332               	.global	adc_timeout
+ 333               		.section .bss
+ 336               	adc_timeout:
+ 337 0000 00        		.skip 1,0
+ 338               	.global	do_adc_sleep
+ 339               	.global	do_adc_sleep
+ 342               	do_adc_sleep:
+ 343 0001 00        		.skip 1,0
+ 344               		.comm current_adc_value,2,1
+ 348               		.text
+ 350               	.Letext0:
+ 351               	.global __do_clear_bss
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+/var/folders/9l/vlqmhmdx4n565__fhq8wf_180000gn/T//cc57JxW3.s:2      *ABS*:0000003f __SREG__
+/var/folders/9l/vlqmhmdx4n565__fhq8wf_180000gn/T//cc57JxW3.s:3      *ABS*:0000003e __SP_H__
+/var/folders/9l/vlqmhmdx4n565__fhq8wf_180000gn/T//cc57JxW3.s:4      *ABS*:0000003d __SP_L__
+/var/folders/9l/vlqmhmdx4n565__fhq8wf_180000gn/T//cc57JxW3.s:5      *ABS*:00000034 __CCP__
+/var/folders/9l/vlqmhmdx4n565__fhq8wf_180000gn/T//cc57JxW3.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/9l/vlqmhmdx4n565__fhq8wf_180000gn/T//cc57JxW3.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/9l/vlqmhmdx4n565__fhq8wf_180000gn/T//cc57JxW3.s:78     .text:00000000 __vector_16
+/var/folders/9l/vlqmhmdx4n565__fhq8wf_180000gn/T//cc57JxW3.s:336    .bss:00000000 adc_timeout
+/var/folders/9l/vlqmhmdx4n565__fhq8wf_180000gn/T//cc57JxW3.s:342    .bss:00000001 do_adc_sleep
+/var/folders/9l/vlqmhmdx4n565__fhq8wf_180000gn/T//cc57JxW3.s:121    .text:00000030 __vector_21
+                            *COM*:00000002 current_adc_value
+/var/folders/9l/vlqmhmdx4n565__fhq8wf_180000gn/T//cc57JxW3.s:236    .text:000000ba main
+
+UNDEFINED SYMBOLS
+__do_clear_bss
