@@ -108,12 +108,13 @@ int main (void)
 	while(1)
 	{
 		ani_battery();	
+		ani_fullcolor();
+		ani_redblue();	
+		ani_greenyellow();	
+		ani_sectors12();
 		ani_rainbow();	
 		ani_sectors3();
 		ani_bluewhite();	
-		ani_greenyellow();	
-		ani_redblue();	
-		ani_sectors12();
 		ani_c3d2();	
 	}// while(1)
 	

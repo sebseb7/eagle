@@ -176,7 +176,7 @@ void ani_battery()
 		adc_tmp = adc_tmp-850;
 
 
-	timeout = 10;
+	timeout = 5;
 	while(1)
 	{	
 		SetLed(0,0,255,0);
@@ -234,7 +234,7 @@ void ani_sectors12()
 	uint16_t delay=1;
 	uint8_t i = 0;
 	
-	timeout = 4;
+	timeout = 8;
 	while(1)
 	{	
 		
@@ -274,9 +274,28 @@ void ani_sectors12()
 		}
 	}
 }
+void ani_fullcolor()
+{
+	timeout=15;
+	while(timeout)
+	{
+		SetLed(0,255,0,0);
+		_delay_ms(2000);
+		SetLed(0,255,0,255);
+		_delay_ms(2000);
+		SetLed(0,0,0,255);
+		_delay_ms(2000);
+		SetLed(0,0,255,255);
+		_delay_ms(2000);
+		SetLed(0,0,255,0);
+		_delay_ms(2000);
+		SetLed(0,255,255,0);
+		_delay_ms(2000);
+	}
+}
 void ani_redblue()
 {
-	timeout=6;
+	timeout=15;
 	while(timeout)
 	{
 		SetLed(0,255,0,0);
