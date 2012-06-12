@@ -85,7 +85,9 @@ int main(void)
 	
 	sei();
 	
-	
+
+	DDRB |= (1<<PORTB0);
+	PORTB |= (1<<PORTB0);
 	
 
 	led_a2 = 1;//white
@@ -112,6 +114,10 @@ int main(void)
 				our_data = 0;
 				continue;
 				
+			} else if (data == 0x23)
+			{
+				idx=5;
+				continue;
 			} else if (data == 0x65)
 			{
 				escape = 1;
@@ -141,16 +147,19 @@ int main(void)
 
 			if(idx == 0)
 			{
-				if(data == 0xf3)//addr
+				if(data == 0xf1)//addr
 				{
 					our_data = 1;
-				} else if(data == 0xff)//bcast
+				} else if(data == 0xf0)//bcast
 				{
 					our_data = 1;
 				}
+				else
+				{
+					our_data = 0;
+				}
 			} 
-			
-			if(our_data == 1)
+			else if(our_data == 1)
 			{
 			
 				if (idx == 1)
@@ -165,12 +174,15 @@ int main(void)
 				} else if (idx == 4)
 				{
 					led_a2 = data;//white
+					
 					our_data = 0;
 				}
 				
 			}
-
-			idx++;
+			if(idx < 5)
+			{
+				idx++;
+			}
 		}
 
 	}
