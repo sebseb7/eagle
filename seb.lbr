@@ -3485,11 +3485,11 @@ IPC7351 - QFN80P500X500X90-21N</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="BATTERY_2XAAA" prefix="G">
+<deviceset name="BATTERY_2XAAA" prefix="BAT">
 <description>&lt;b&gt;Farnell Battery Holder 2x AAA&lt;/b&gt;
 &lt;br /&gt; Farnell # 1650679</description>
 <gates>
-<gate name="G$1" symbol="BATTERY_2XAAA" x="0" y="0"/>
+<gate name="G$1" symbol="BATTERY_2XAAA" x="-2.54" y="2.54"/>
 </gates>
 <devices>
 <device name="" package="BATTERY_2XAAA">
