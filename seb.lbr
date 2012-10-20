@@ -1509,6 +1509,10 @@ IPC7351 - QFN80P500X500X90-21N</description>
 <smd name="P$1" x="-1.7" y="0" dx="0.8" dy="1.7" layer="1"/>
 <smd name="P$2" x="1.7" y="0" dx="0.8" dy="1.7" layer="1"/>
 </package>
+<package name="ABM3">
+<smd name="P$1" x="-2.05" y="0" dx="2.4" dy="1.9" layer="1" rot="R90"/>
+<smd name="P$2" x="2.05" y="0" dx="2.4" dy="1.9" layer="1" rot="R90"/>
+</package>
 </packages>
 <symbols>
 <symbol name="DEANS">
@@ -3397,6 +3401,22 @@ IPC7351 - QFN80P500X500X90-21N</description>
 </gates>
 <devices>
 <device name="" package="B3U-3000P">
+<connects>
+<connect gate="G$1" pin="1" pad="P$1"/>
+<connect gate="G$1" pin="2" pad="P$2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="ABM3-OSCILLATOR">
+<gates>
+<gate name="G$1" symbol="Q" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="ABM3">
 <connects>
 <connect gate="G$1" pin="1" pad="P$1"/>
 <connect gate="G$1" pin="2" pad="P$2"/>
