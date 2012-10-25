@@ -1,7 +1,7 @@
 PROJECT=4ch
 
-MCU = atmega168
-MCU_AVRDUDE = atmega168
+MCU = atmega88p
+MCU_AVRDUDE = m88p
 
 
 #full swing, bod 4,7
@@ -66,7 +66,9 @@ clean:
 
 flash: all
 	avrdude -F -p $(MCU_AVRDUDE) -P $(USB_DEVICE) -c stk500v2    -U flash:w:$(PROJECT).hex
+	#avrdude -p $(MCU_AVRDUDE) -c usbtiny    -U flash:w:$(PROJECT).hex
 
 fuse:
 	avrdude -F -p $(MCU_AVRDUDE) -P $(USB_DEVICE) -c stk500v2    $(FUSE_SETTINGS)
+	#avrdude -p $(MCU_AVRDUDE) -c usbtiny    $(FUSE_SETTINGS)
 
