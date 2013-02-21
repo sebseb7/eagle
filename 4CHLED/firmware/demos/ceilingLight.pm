@@ -1,67 +1,64 @@
 #!/usr/bin/perl
 
-
 package ceilingLight;
 
 use strict;
-use Device::SerialPort;
+use IO::Socket;
 use Time::HiRes qw(usleep);
-use POSIX;
+use IO::Socket::INET6;
 
-
-my $port;
+my $socket;
+my $window = 3;
 
 sub init()
 {
-
-	$port = Device::SerialPort->new("/dev/cu.usbserial-A100DDXM");
-	$port->databits(8);
-	$port->baudrate(500000);
-	$port->parity("none");
-	$port->stopbits(1);
+	$socket = IO::Socket::INET6->new(PeerAddr => 'bender',
+									PeerPort => 1340,
+									Proto    => "tcp",
+									Type     => SOCK_STREAM)     or die "Couldn't connect : $@\n";
 }
 
-
-sub read()
+sub record()
 {
-	return $port->read(1);
+	print $socket "05\r\n";
 }
+
 
 sub setColor($$$$$)
 {
-	my $addr = shift;
-	my $r = shift;
-	my $g = shift;
-	my $b = shift;
-	my $w = shift;
+	my $x = shift;
+	my $red = shift;
+	my $green = shift;
+	my $blue = shift;
+	my $white = shift;
 
-	if($addr == 0)
-	{
-		$addr = 255;
-	}
-	else
-	{
-		$addr+=239;
-	}
+	$x = $x+0xf0;
 
 
-	my $return=$port->write(chr(0x42).esc(chr($addr).chr(int $r).chr(int $g).chr(int $b).chr(int $w)));
-	usleep(1000);
+
+
+	print $socket '02'.sprintf("%02x",$x).sprintf("%2x",$red).sprintf("%2x",$green).sprintf("%2x",$blue).sprintf("%2x",$white)."\r\n";
 }
 
 
-
-sub esc($)
+sub setLevel($)
 {
-    my $data = shift;
-    
-    
-	$data =~ s/\x65/\x65\x3/go;
-	$data =~ s/\x23/\x65\x1/go;
-	$data =~ s/\x42/\x65\x2/go;
-	$data =~ s/\x66/\x65\x4/go;
-                                                            
-	return $data;
+	my $level=shift;
+
+	print $socket '04'.sprintf("%02x", $level);
+#	print $socket2 '04'.sprintf("%02x", $level);
+		
+	print $socket "\r\n";
+#	print $socket2 "\r\n";
+
+#	warn <$socket>;
+}
+
+sub readline()
+{
+#	my $liney = <$socket2>;
+	my $line = <$socket>;
+	return $line;
 }
 
 sub hsv2rgb {
@@ -114,7 +111,12 @@ sub hsv2rgb {
       } 
     }
     return ($r, $g, $b);
-}
+};
 
+
+sub read()
+{
+}
 1;
+
 

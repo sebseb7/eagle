@@ -147,7 +147,7 @@ int main(void)
 
 			if(idx == 0)
 			{
-				if(data == 0xf1)//addr
+				if(data == 0xf5)//addr
 				{
 					our_data = 1;
 				} else if(data == 0xf0)//bcast

@@ -8,5 +8,8 @@ use Time::HiRes qw(usleep);
 ceilingLight::init();
 
 ceilingLight::setColor(0,0,0,250,0);
+
+sleep 10;
+
 warn ceilingLight::read();
 

@@ -36,7 +36,7 @@ while(1)
 	ceilingLight::setColor(4,int($r4*255),int($g4*255),int($b4*255),0);
 	
 
-	usleep(4001);
+	usleep(94001);
 
 }
 warn ceilingLight::read();

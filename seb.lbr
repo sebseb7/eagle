@@ -1509,6 +1509,10 @@ IPC7351 - QFN80P500X500X90-21N</description>
 <smd name="P$1" x="-1.7" y="0" dx="0.8" dy="1.7" layer="1"/>
 <smd name="P$2" x="1.7" y="0" dx="0.8" dy="1.7" layer="1"/>
 </package>
+<package name="ABM3">
+<smd name="P$1" x="-2.05" y="0" dx="2.4" dy="1.9" layer="1" rot="R90"/>
+<smd name="P$2" x="2.05" y="0" dx="2.4" dy="1.9" layer="1" rot="R90"/>
+</package>
 <package name="BATTERY_2XAAA">
 <description>&lt;b&gt;Farnell Battery Holder 2x AAA&lt;/b&gt;
 &lt;br /&gt; Farnell # 1650679</description>
@@ -2522,6 +2526,44 @@ IPC7351 - QFN80P500X500X90-21N</description>
 </symbol>
 <symbol name="MAKE-DD_LOGO">
 <text x="0" y="0" size="0.8128" layer="94" font="vector">make -dd logo</text>
+</symbol>
+<symbol name="MPU-9150">
+<wire x1="-22.86" y1="22.86" x2="-22.86" y2="-27.94" width="0.254" layer="94"/>
+<wire x1="-22.86" y1="-27.94" x2="25.4" y2="-27.94" width="0.254" layer="94"/>
+<wire x1="25.4" y1="-27.94" x2="25.4" y2="22.86" width="0.254" layer="94"/>
+<wire x1="25.4" y1="22.86" x2="-22.86" y2="22.86" width="0.254" layer="94"/>
+<text x="-17.78" y="17.78" size="1.778" layer="94" font="vector">CLKIN</text>
+<text x="-17.78" y="12.7" size="1.778" layer="94" font="vector">CLKOUT</text>
+<text x="-17.78" y="5.08" size="1.778" layer="94" font="vector">CPOUT</text>
+<text x="-15.24" y="-2.54" size="1.778" layer="94" font="vector">VDD</text>
+<text x="-17.78" y="-12.7" size="1.778" layer="94" font="vector">GND</text>
+<text x="-17.78" y="-17.78" size="1.778" layer="94" font="vector">REGOUT</text>
+<text x="-17.78" y="-22.86" size="1.778" layer="94" font="vector">VLOGIC</text>
+<text x="20.32" y="17.78" size="1.778" layer="94" font="vector" rot="MR0">INT</text>
+<text x="20.32" y="10.16" size="1.778" layer="94" font="vector" rot="MR0">AD0</text>
+<text x="20.32" y="5.08" size="1.778" layer="94" font="vector" rot="MR0">SCL</text>
+<text x="20.32" y="0" size="1.778" layer="94" font="vector" rot="MR0">SDA</text>
+<text x="20.32" y="-7.62" size="1.778" layer="94" font="vector" rot="MR0">AUX_CL</text>
+<text x="20.32" y="-12.7" size="1.778" layer="94" font="vector" rot="MR0">AUX_DA</text>
+<text x="20.32" y="-20.32" size="1.778" layer="94" font="vector" rot="MR0">FSYNC</text>
+<text x="-17.78" y="-7.62" size="1.778" layer="94" font="vector">PAD</text>
+<text x="-20.32" y="25.4" size="1.778" layer="94" font="vector">MPU-9150</text>
+<text x="22.86" y="25.4" size="1.778" layer="94" font="vector" rot="MR0">&gt;NAME</text>
+<pin name="1" x="-27.94" y="17.78" length="middle"/>
+<pin name="22" x="-27.94" y="12.7" length="middle"/>
+<pin name="20" x="-27.94" y="5.08" length="middle"/>
+<pin name="3/13" x="-27.94" y="-2.54" length="middle"/>
+<pin name="15/17/18" x="-27.94" y="-12.7" length="middle"/>
+<pin name="10" x="-27.94" y="-17.78" length="middle"/>
+<pin name="8" x="-27.94" y="-22.86" length="middle"/>
+<pin name="12" x="30.48" y="17.78" length="middle" rot="R180"/>
+<pin name="9" x="30.48" y="10.16" length="middle" rot="R180"/>
+<pin name="23" x="30.48" y="5.08" length="middle" rot="R180"/>
+<pin name="24" x="30.48" y="0" length="middle" rot="R180"/>
+<pin name="7" x="30.48" y="-7.62" length="middle" rot="R180"/>
+<pin name="6" x="30.48" y="-12.7" length="middle" rot="R180"/>
+<pin name="11" x="30.48" y="-20.32" length="middle" rot="R180"/>
+<pin name="P" x="-27.94" y="-7.62" length="middle"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -3671,6 +3713,22 @@ IPC7351 - QFN80P500X500X90-21N</description>
 </device>
 </devices>
 </deviceset>
+<deviceset name="ABM3-OSCILLATOR">
+<gates>
+<gate name="G$1" symbol="Q" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="ABM3">
+<connects>
+<connect gate="G$1" pin="1" pad="P$1"/>
+<connect gate="G$1" pin="2" pad="P$2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
 <deviceset name="BATTERY_2XAAA" prefix="BAT">
 <description>&lt;b&gt;Farnell Battery Holder 2x AAA&lt;/b&gt;
 &lt;br /&gt; Farnell # 1650679</description>
@@ -3751,6 +3809,35 @@ IPC7351 - QFN80P500X500X90-21N</description>
 </gates>
 <devices>
 <device name="" package="MAKE-DD_LOGO">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="MPU-9150" prefix="IC">
+<gates>
+<gate name="G$1" symbol="MPU-9150" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="QFN24">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="10" pad="10"/>
+<connect gate="G$1" pin="11" pad="11"/>
+<connect gate="G$1" pin="12" pad="12"/>
+<connect gate="G$1" pin="15/17/18" pad="15 17 18"/>
+<connect gate="G$1" pin="20" pad="20"/>
+<connect gate="G$1" pin="22" pad="22"/>
+<connect gate="G$1" pin="23" pad="23"/>
+<connect gate="G$1" pin="24" pad="24"/>
+<connect gate="G$1" pin="3/13" pad="3 13"/>
+<connect gate="G$1" pin="6" pad="6"/>
+<connect gate="G$1" pin="7" pad="7"/>
+<connect gate="G$1" pin="8" pad="8"/>
+<connect gate="G$1" pin="9" pad="9"/>
+<connect gate="G$1" pin="P" pad="P"/>
+</connects>
 <technologies>
 <technology name=""/>
 </technologies>
