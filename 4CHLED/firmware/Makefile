@@ -1,7 +1,7 @@
 PROJECT=4ch
 
-MCU = atmega88p
-MCU_AVRDUDE = m88p
+MCU = atmega168p
+MCU_AVRDUDE = m168p
 
 
 #full swing, bod 4,7
