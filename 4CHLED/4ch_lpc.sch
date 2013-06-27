@@ -1789,9 +1789,8 @@ For all RJ45 N and Z Series Models&lt;br&gt;
 Source: www.tycoelectronics.com .. ENG_DS_1654001_1099_RJ_L_0507.pdf</description>
 <wire x1="-7.527" y1="10.819" x2="7.527" y2="10.819" width="0.2032" layer="21"/>
 <wire x1="8.4455" y1="-5.5118" x2="-8.4455" y2="-5.5118" width="0.01" layer="20"/>
-<wire x1="7.527" y1="-7.782" x2="-7.527" y2="-7.782" width="0.2032" layer="21"/>
-<wire x1="-7.527" y1="-7.782" x2="-7.527" y2="10.819" width="0.2032" layer="21"/>
-<wire x1="7.527" y1="10.819" x2="7.527" y2="-7.782" width="0.2032" layer="21"/>
+<wire x1="-7.527" y1="-5.369" x2="-7.527" y2="10.819" width="0.2032" layer="21"/>
+<wire x1="7.527" y1="10.819" x2="7.527" y2="-5.369" width="0.2032" layer="21"/>
 <pad name="4" x="-0.635" y="8.89" drill="0.9" diameter="1.4"/>
 <pad name="3" x="-1.905" y="6.35" drill="0.9" diameter="1.4"/>
 <pad name="2" x="-3.175" y="8.89" drill="0.9" diameter="1.4"/>
