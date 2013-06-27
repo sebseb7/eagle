@@ -13909,7 +13909,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <part name="U$1" library="seb" deviceset="MAKE-DD_LOGO" device="'PROMPT'"/>
 <part name="SUPPLY1" library="supply2" deviceset="+4.1V" device=""/>
 <part name="SUPPLY2" library="supply2" deviceset="+4.1V" device=""/>
-<part name="U1" library="microbuilder" deviceset="LPC1113/4_QFN" device=""/>
+<part name="IC5" library="microbuilder" deviceset="LPC1113/4_QFN" device=""/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
 <part name="P+1" library="supply1" deviceset="+5V" device=""/>
 <part name="IC1" library="seb" deviceset="LT1761" device=""/>
@@ -13936,6 +13936,9 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <part name="X4" library="con-molex" deviceset="87758-0616" device=""/>
 <part name="GND11" library="supply1" deviceset="GND" device=""/>
 <part name="P+4" library="supply1" deviceset="+5V" device=""/>
+<part name="R17" library="SparkFun" deviceset="RESISTOR" device="0402-RES" value="68k"/>
+<part name="GND12" library="supply1" deviceset="GND" device=""/>
+<part name="+3V6" library="supply1" deviceset="+3V3" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -14057,7 +14060,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <instance part="U$1" gate="G$1" x="401.32" y="15.24"/>
 <instance part="SUPPLY1" gate="P" x="383.54" y="129.54"/>
 <instance part="SUPPLY2" gate="P" x="86.36" y="15.24" rot="R90"/>
-<instance part="U1" gate="G$1" x="195.58" y="45.72"/>
+<instance part="IC5" gate="G$1" x="195.58" y="45.72"/>
 <instance part="GND1" gate="1" x="124.46" y="22.86" rot="R270"/>
 <instance part="P+1" gate="1" x="149.86" y="147.32"/>
 <instance part="IC1" gate="G$1" x="182.88" y="134.62"/>
@@ -14105,6 +14108,9 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <instance part="X4" gate="-6" x="154.94" y="-15.24"/>
 <instance part="GND11" gate="1" x="129.54" y="-12.7" rot="R270"/>
 <instance part="P+4" gate="1" x="129.54" y="-15.24" rot="R90"/>
+<instance part="R17" gate="G$1" x="33.02" y="127" rot="R90"/>
+<instance part="GND12" gate="1" x="33.02" y="119.38"/>
+<instance part="+3V6" gate="G$1" x="132.08" y="60.96" rot="R90"/>
 </instances>
 <busses>
 </busses>
@@ -14236,7 +14242,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 </segment>
 <segment>
 <pinref part="GND1" gate="1" pin="GND"/>
-<pinref part="U1" gate="G$1" pin="VSS"/>
+<pinref part="IC5" gate="G$1" pin="VSS"/>
 <wire x1="127" y1="22.86" x2="144.78" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -14271,6 +14277,10 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <segment>
 <pinref part="X4" gate="-3" pin="S"/>
 <pinref part="GND11" gate="1" pin="GND"/>
+</segment>
+<segment>
+<pinref part="R17" gate="G$1" pin="1"/>
+<pinref part="GND12" gate="1" pin="GND"/>
 </segment>
 </net>
 <net name="+5V" class="0">
@@ -14352,7 +14362,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <pinref part="IC2" gate="G$1" pin="DI"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="PIO1_7/TXD/CT32B0_MAT1"/>
+<pinref part="IC5" gate="G$1" pin="PIO1_7/TXD/CT32B0_MAT1"/>
 <wire x1="248.92" y1="50.8" x2="264.16" y2="50.8" width="0.1524" layer="91"/>
 <label x="259.08" y="50.8" size="1.778" layer="95"/>
 </segment>
@@ -14369,7 +14379,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <pinref part="IC2" gate="G$1" pin="RO"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="PIO1_6/RXD/CT32B0_MAT0"/>
+<pinref part="IC5" gate="G$1" pin="PIO1_6/RXD/CT32B0_MAT0"/>
 <wire x1="248.92" y1="53.34" x2="264.16" y2="53.34" width="0.1524" layer="91"/>
 <label x="259.08" y="53.34" size="1.778" layer="95"/>
 </segment>
@@ -14381,15 +14391,17 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 </net>
 <net name="!RE" class="0">
 <segment>
-<wire x1="48.26" y1="134.62" x2="40.64" y2="134.62" width="0.1524" layer="91"/>
 <wire x1="48.26" y1="134.62" x2="48.26" y2="129.54" width="0.1524" layer="91"/>
 <junction x="48.26" y="134.62"/>
 <label x="43.18" y="134.62" size="1.778" layer="95"/>
 <pinref part="IC2" gate="G$1" pin="RE/"/>
 <pinref part="IC2" gate="G$1" pin="DE"/>
+<pinref part="R17" gate="G$1" pin="2"/>
+<wire x1="48.26" y1="134.62" x2="33.02" y2="134.62" width="0.1524" layer="91"/>
+<wire x1="33.02" y1="134.62" x2="33.02" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="PIO1_5/RTS/CT32B0_CAP0"/>
+<pinref part="IC5" gate="G$1" pin="PIO1_5/RTS/CT32B0_CAP0"/>
 <wire x1="248.92" y1="55.88" x2="264.16" y2="55.88" width="0.1524" layer="91"/>
 <label x="259.08" y="55.88" size="1.778" layer="95"/>
 </segment>
@@ -14435,7 +14447,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <pinref part="T2" gate="G$1" pin="G"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="TRST/PIO1_2/AD3/CT32B1_MAT1"/>
+<pinref part="IC5" gate="G$1" pin="TRST/PIO1_2/AD3/CT32B1_MAT1"/>
 <wire x1="248.92" y1="63.5" x2="264.16" y2="63.5" width="0.1524" layer="91"/>
 <label x="259.08" y="63.5" size="1.778" layer="95"/>
 </segment>
@@ -14454,7 +14466,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <pinref part="T1" gate="G$2" pin="G"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="SWDIO/PIO1_3/AD4/CT32B1_MAT2"/>
+<pinref part="IC5" gate="G$1" pin="SWDIO/PIO1_3/AD4/CT32B1_MAT2"/>
 <wire x1="248.92" y1="60.96" x2="264.16" y2="60.96" width="0.1524" layer="91"/>
 <label x="259.08" y="60.96" size="1.778" layer="95"/>
 </segment>
@@ -14473,7 +14485,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <pinref part="T1" gate="G$1" pin="G"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="PIO1_4/AD5/CT32B1_MAT3/WAKEUP"/>
+<pinref part="IC5" gate="G$1" pin="PIO1_4/AD5/CT32B1_MAT3/WAKEUP"/>
 <wire x1="248.92" y1="58.42" x2="264.16" y2="58.42" width="0.1524" layer="91"/>
 <label x="259.08" y="58.42" size="1.778" layer="95"/>
 </segment>
@@ -14504,7 +14516,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <pinref part="T2" gate="G$2" pin="G"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="TDO/PIO1_1/AD2/CT32B1_MAT0"/>
+<pinref part="IC5" gate="G$1" pin="TDO/PIO1_1/AD2/CT32B1_MAT0"/>
 <wire x1="248.92" y1="66.04" x2="264.16" y2="66.04" width="0.1524" layer="91"/>
 <label x="259.08" y="66.04" size="1.778" layer="95"/>
 </segment>
@@ -14622,7 +14634,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <wire x1="271.78" y1="73.66" x2="271.78" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="271.78" y1="71.12" x2="274.32" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="274.32" y1="71.12" x2="274.32" y2="27.94" width="0.1524" layer="91"/>
-<pinref part="U1" gate="G$1" pin="PIO3_4"/>
+<pinref part="IC5" gate="G$1" pin="PIO3_4"/>
 <wire x1="274.32" y1="27.94" x2="248.92" y2="27.94" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -14697,11 +14709,11 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <junction x="210.82" y="139.7"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="VDD(IO)"/>
+<pinref part="IC5" gate="G$1" pin="VDD(IO)"/>
 <pinref part="+3V2" gate="G$1" pin="+3V3"/>
 <wire x1="144.78" y1="25.4" x2="129.54" y2="25.4" width="0.1524" layer="91"/>
 <wire x1="129.54" y1="25.4" x2="129.54" y2="27.94" width="0.1524" layer="91"/>
-<pinref part="U1" gate="G$1" pin="VDD(3V3)"/>
+<pinref part="IC5" gate="G$1" pin="VDD(3V3)"/>
 <wire x1="129.54" y1="27.94" x2="129.54" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="144.78" y1="27.94" x2="129.54" y2="27.94" width="0.1524" layer="91"/>
 <junction x="129.54" y="27.94"/>
@@ -14724,6 +14736,11 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <pinref part="C15" gate="G$1" pin="2"/>
 <pinref part="+3V5" gate="G$1" pin="+3V3"/>
 </segment>
+<segment>
+<pinref part="+3V6" gate="G$1" pin="+3V3"/>
+<pinref part="IC5" gate="G$1" pin="PIO0_3"/>
+<wire x1="134.62" y1="60.96" x2="144.78" y2="60.96" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="N$7" class="0">
 <segment>
@@ -14735,7 +14752,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 </net>
 <net name="RST" class="0">
 <segment>
-<pinref part="U1" gate="G$1" pin="RESET/PIO0_0"/>
+<pinref part="IC5" gate="G$1" pin="RESET/PIO0_0"/>
 <wire x1="144.78" y1="68.58" x2="132.08" y2="68.58" width="0.1524" layer="91"/>
 <pinref part="R1" gate="G$1" pin="2"/>
 <wire x1="132.08" y1="68.58" x2="121.92" y2="68.58" width="0.1524" layer="91"/>
@@ -14751,7 +14768,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 </net>
 <net name="BL" class="0">
 <segment>
-<pinref part="U1" gate="G$1" pin="PIO0_1/CLKOUT/CT32B0_MAT2"/>
+<pinref part="IC5" gate="G$1" pin="PIO0_1/CLKOUT/CT32B0_MAT2"/>
 <wire x1="144.78" y1="66.04" x2="137.16" y2="66.04" width="0.1524" layer="91"/>
 <pinref part="R16" gate="G$1" pin="2"/>
 <wire x1="137.16" y1="66.04" x2="121.92" y2="66.04" width="0.1524" layer="91"/>
@@ -14770,7 +14787,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 <pinref part="Q1" gate="G$1" pin="1"/>
 <wire x1="119.38" y1="40.64" x2="134.62" y2="40.64" width="0.1524" layer="91"/>
 <wire x1="134.62" y1="40.64" x2="134.62" y2="33.02" width="0.1524" layer="91"/>
-<pinref part="U1" gate="G$1" pin="XTALOUT"/>
+<pinref part="IC5" gate="G$1" pin="XTALOUT"/>
 <wire x1="134.62" y1="33.02" x2="144.78" y2="33.02" width="0.1524" layer="91"/>
 <pinref part="C5" gate="G$1" pin="2"/>
 <junction x="119.38" y="40.64"/>
@@ -14778,7 +14795,7 @@ Source: http://www.molex.com/pdm_docs/sd/877580616_sd.pdf</description>
 </net>
 <net name="N$21" class="0">
 <segment>
-<pinref part="U1" gate="G$1" pin="XTALIN"/>
+<pinref part="IC5" gate="G$1" pin="XTALIN"/>
 <wire x1="144.78" y1="35.56" x2="137.16" y2="35.56" width="0.1524" layer="91"/>
 <wire x1="137.16" y1="35.56" x2="137.16" y2="45.72" width="0.1524" layer="91"/>
 <pinref part="Q1" gate="G$1" pin="2"/>
