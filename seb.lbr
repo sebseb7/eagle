@@ -2310,6 +2310,19 @@ IPC7351 - QFN80P500X500X90-21N</description>
 <wire x1="-3.37" y1="29.47" x2="51.63" y2="29.47" width="0.127" layer="21"/>
 <text x="19.05" y="12.7" size="1.27" layer="21" font="vector">EA DOGM</text>
 </package>
+<package name="TRACO_TMLM_04">
+<pad name="1" x="0" y="0" drill="0.8"/>
+<pad name="2" x="0" y="21.5" drill="0.8"/>
+<pad name="7" x="-21" y="0" drill="0.8"/>
+<pad name="6" x="-21" y="21.5" drill="0.8"/>
+<pad name="3" x="0" y="25.25" drill="0.8"/>
+<pad name="4" x="0" y="29" drill="0.8"/>
+<pad name="5" x="-21" y="29" drill="0.8"/>
+<wire x1="3" y1="-3" x2="-24" y2="-3" width="0.127" layer="21"/>
+<wire x1="-24" y1="-3" x2="-24" y2="33" width="0.127" layer="21"/>
+<wire x1="-24" y1="33" x2="3" y2="33" width="0.127" layer="21"/>
+<wire x1="3" y1="33" x2="3" y2="-3" width="0.127" layer="21"/>
+</package>
 </packages>
 <symbols>
 <symbol name="DEANS">
@@ -3341,6 +3354,16 @@ IPC7351 - QFN80P500X500X90-21N</description>
 <wire x1="0" y1="33.02" x2="2.54" y2="35.56" width="0.254" layer="94"/>
 <wire x1="2.54" y1="35.56" x2="2.54" y2="34.29" width="0.254" layer="94"/>
 <wire x1="2.54" y1="35.56" x2="1.27" y2="35.56" width="0.254" layer="94"/>
+</symbol>
+<symbol name="TRACO_TMLM_04">
+<pin name="AC_L" x="-40.64" y="10.16" length="middle"/>
+<pin name="AC_N" x="-40.64" y="2.54" length="middle"/>
+<pin name="VP" x="-2.54" y="10.16" length="middle" rot="R180"/>
+<pin name="VM" x="-2.54" y="2.54" length="middle" rot="R180"/>
+<wire x1="-35.56" y1="15.24" x2="-7.62" y2="15.24" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="15.24" x2="-7.62" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="-2.54" x2="-35.56" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-35.56" y1="-2.54" x2="-35.56" y2="15.24" width="0.254" layer="94"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -4764,6 +4787,24 @@ IPC7351 - QFN80P500X500X90-21N</description>
 <connect gate="G$1" pin="VIN" pad="25"/>
 <connect gate="G$1" pin="VOUT" pad="24"/>
 <connect gate="G$1" pin="VSS" pad="27"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="TRACO_TMLM_04" prefix="IC">
+<gates>
+<gate name="G$1" symbol="TRACO_TMLM_04" x="33.02" y="12.7"/>
+</gates>
+<devices>
+<device name="" package="TRACO_TMLM_04">
+<connects>
+<connect gate="G$1" pin="AC_L" pad="5"/>
+<connect gate="G$1" pin="AC_N" pad="6"/>
+<connect gate="G$1" pin="VM" pad="3"/>
+<connect gate="G$1" pin="VP" pad="2"/>
 </connects>
 <technologies>
 <technology name=""/>
