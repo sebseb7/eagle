@@ -1,5 +1,5 @@
 Simple UART to USB bridge
 
-![board](/sebseb7/eagle/raw/master/FTDI/ftdi_brd.jpg)
+![board](https://raw.github.com/sebseb7/eagle/master/FTDI/ftdi_brd.jpg)
 
-![schematics](/sebseb7/eagle/raw/master/FTDI/ftdi_sch.jpg)
+![schematics](https://raw.github.com/sebseb7/eagle/master/FTDI/ftdi_sch.jpg)
